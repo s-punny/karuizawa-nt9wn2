@@ -12,19 +12,21 @@ robots.txt      検索エンジンからのクロールを拒否
 .nojekyll       GitHub Pages の Jekyll 処理を無効化
 ```
 
+## 公開先
+
+<https://s-punny.github.io/karuizawa-nt9wn2/>
+
 ## 公開の手順（GitHub Pages）
 
-1. GitHub でリポジトリを作る
+1. GitHub で `karuizawa-nt9wn2` を Public で作る（初期ファイルは付けない）
 2. このフォルダの中身を push する
 3. リポジトリの **Settings → Pages** で
    Source を `Deploy from a branch`、Branch を `main` / `/(root)` に設定
-4. 数分で `https://<ユーザー名>.github.io/<リポジトリ名>/` に公開される
+4. 数分で公開される
 
-## 公開URLが決まったらやること
-
-`index.html` の先頭にある `USERNAME.github.io/REPO` を実際のURLに差し替える。
-3か所（`canonical` / `og:url` / `og:image`）。
-ここを直さないと、LINEで送ったときのサムネイルが出ない。
+URLを変える場合は `index.html` 冒頭の3か所
+（`canonical` / `og:url` / `og:image`）も合わせて直すこと。
+ここが合っていないと、LINEで送ったときのサムネイルが出ない。
 
 ## 情報の差し替え
 
