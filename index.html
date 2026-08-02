@@ -385,6 +385,7 @@ section + section .wrap::before{
   position:relative;
 }
 .tl .t{
+  position:relative;
   font-family:var(--en);
   font-size:1.06rem; letter-spacing:.1em;
   color:rgba(22,33,28,.72);
@@ -392,9 +393,14 @@ section + section .wrap::before{
   text-align:right;
   font-variant-numeric:tabular-nums;
 }
-.tl li::after{
+/* 丸は時刻セルに紐づける。em が時刻の字送りで解決されるので、
+   行ごとに文字サイズが変わっても1行目の中心に乗り続ける。
+   縦 = padding-top(.16em) + 行送り(2.05em)の半分 − 丸の半径
+   横 = 時刻セルの右端 + .5px（罫線の中心）に丸の中心を合わせる */
+.tl .t::after{
   content:""; position:absolute;
-  left:4.6em; top:1.55em; translate:-3.5px 0;
+  top:calc(.16em + 1.025em - 5px);
+  right:-5.5px;
   width:8px; height:8px; border-radius:50%;
   background:var(--paper);
   border:1px solid var(--brass);
@@ -405,7 +411,7 @@ section + section .wrap::before{
   color:rgba(22,33,28,.62); letter-spacing:.07em;
 }
 /* 挙式の行 */
-.tl li.key::after{ background:var(--brass); box-shadow:0 0 0 4px rgba(169,139,82,.16); }
+.tl li.key .t::after{ background:var(--brass); box-shadow:0 0 0 4px rgba(169,139,82,.16); }
 .tl li.key .t{ color:var(--ink); font-size:1.3rem; }
 .tl li.key .ttl{
   font-size:1.3rem; font-weight:600; letter-spacing:.22em;
@@ -425,58 +431,18 @@ section + section .wrap::before{
 .callout .lbl{ color:var(--brass); }
 .callout p{ margin:0; font-size:.84rem; line-height:2.1; }
 
-/* ===== 写真の見開き（チャペル） ========================== */
-.photos{ padding-top:0 !important; padding-bottom:clamp(96px,15vh,168px) !important; }
-.photos .wrap::before{ display:none; }
-
-.spread{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  column-gap:clamp(16px,3vw,34px);
-}
-/* 主写真：右へ断ち落とす */
-.spread .shot-main{
-  grid-column:2; grid-row:1;
+/* ===== 会場の一枚 ======================================== */
+/* 章の頭に置く大きな写真。元データ 1000×650 を超えて拡大しないよう
+   本文幅（860px）のなかに収める */
+.venue-photo{
   --ar:1000 / 650;
-  margin-right:calc(-1 * clamp(24px,6vw,150px));
   border:none;
+  margin-bottom:clamp(26px,5vh,44px);
 }
-/* 添えの一枚：次の行に置いて、負のマージンで主写真の左下に食い込ませる */
-.spread .shot-sub{
-  grid-column:2; grid-row:2;
-  --ar:7 / 5;
-  z-index:3;
-  width:clamp(146px,30%,248px);
-  margin-top:calc(-1 * clamp(48px,9vw,132px));
-  margin-left:calc(-1 * clamp(16px,3vw,44px));
-  border:none;
-  outline:clamp(6px,1vw,10px) solid var(--paper);
-  box-shadow:0 26px 44px -30px rgba(22,33,28,.85);
-}
-/* 縦組みのキャプション（英字と和文を二本の柱に） */
-.spread-side{
-  grid-column:1; grid-row:1;
-  display:flex; flex-direction:row-reverse; align-items:flex-start;
-  gap:clamp(10px,1.6vw,20px);
-  padding-top:.6em;
-}
-.spread-side .en{
-  writing-mode:vertical-rl;
-  letter-spacing:.34em; color:var(--brass);
-  white-space:nowrap;
-}
-.spread-note{
-  margin:0;
-  writing-mode:vertical-rl; text-orientation:mixed;
-  font-size:.84rem; line-height:2.4; letter-spacing:.2em;
-  color:rgba(22,33,28,.66);
-  white-space:nowrap;
-}
-.spread-note::after{
-  content:""; display:inline-block; vertical-align:middle;
-  width:1px; height:clamp(30px,6vh,64px);
-  background:linear-gradient(var(--brass), transparent);
-  margin-top:1.4em;
+.venue-cap{
+  margin:1em 0 clamp(26px,5vh,44px);
+  font-size:.78rem; letter-spacing:.2em; text-align:right;
+  color:rgba(22,33,28,.55);
 }
 
 /* ===== 二段組 ============================================ */
@@ -493,6 +459,8 @@ section + section .wrap::before{
 }
 .card .en{ color:var(--brass); }
 .card p{ margin:0 0 .8em; font-size:.85rem; line-height:2.1; color:rgba(22,33,28,.78); }
+/* 見出しを持たないカード（ラベルだけで始まるもの） */
+.card.plain .en{ display:block; margin-bottom:1.3em; }
 .card dl{ margin:1.1em 0 0; display:grid; grid-template-columns:6.4em 1fr; gap:.7em 1em; font-size:.82rem; }
 .card dt{ color:rgba(22,33,28,.5); letter-spacing:.14em; }
 .card dd{ margin:0; letter-spacing:.06em; }
@@ -531,6 +499,8 @@ section + section .wrap::before{
 
 /* カード上の写真 */
 .card .ph{ margin-bottom:1.6em; }
+/* 写真がまだ無いスロットは、幅いっぱいの空箱にしない */
+.card .ph.narrow{ max-width:420px; }
 .card{ position:relative; }
 
 /* ===== 地図 ============================================== */
@@ -613,8 +583,10 @@ section + section .wrap::before{
   font-style:normal; font-size:.68rem; letter-spacing:.22em;
   color:rgba(22,33,28,.48); min-width:4.2em;
 }
+/* 人数が左右で違っても、下端の人数表記は揃える */
+.side{ display:flex; flex-direction:column; }
 .count{
-  margin-top:1.4em; text-align:center;
+  margin-top:auto; padding-top:1.4em; text-align:center;
   font-family:var(--en); letter-spacing:.3em; font-size:.76rem;
   color:rgba(22,33,28,.5);
 }
@@ -639,6 +611,9 @@ section + section .wrap::before{
   text-transform:uppercase; color:var(--brass); margin-top:.7em; font-weight:400;
 }
 .note p{ margin:0; font-size:.84rem; line-height:2.15; color:rgba(22,33,28,.78); }
+.note p + p{ margin-top:1.1em; }
+.note strong{ font-weight:500; color:var(--ink); }
+.note .fine{ font-size:.76rem; color:rgba(22,33,28,.52); }
 
 /* ===== 奥付 =============================================== */
 .colophon{
@@ -730,27 +705,7 @@ section + section .wrap::before{
   .map{ aspect-ratio:4 / 3; }
   .btn{ width:100%; justify-content:center; }
   /* 縦組みは幅を食うので、小さい画面では横組みに戻して積む */
-  .spread{ grid-template-columns:42% 1fr; column-gap:clamp(12px,3.5vw,18px); }
-  .spread .shot-main{
-    grid-column:1 / -1; grid-row:1;
-    margin-right:calc(var(--gut) * -1);
-  }
-  .spread .shot-sub{
-    grid-column:1; grid-row:2;
-    width:100%;
-    margin:calc(-1 * clamp(28px,9vw,52px)) 0 0 calc(var(--gut) * -.5);
-    outline-width:5px;
-  }
-  .spread-side{
-    grid-column:2; grid-row:2;
-    flex-direction:column; align-items:flex-start;
-    gap:1.1em; padding-top:clamp(10px,3vw,20px);
-  }
-  .spread-side .en,
-  .spread-note{ writing-mode:horizontal-tb; white-space:normal; }
-  .spread-side .en{ font-size:.58rem; letter-spacing:.3em; }
-  .spread-note{ font-size:.76rem; letter-spacing:.12em; line-height:2.1; }
-  .spread-note::after{ display:none; }
+  .venue-cap{ text-align:left; }
   .note{ grid-template-columns:1fr; }
   .note h3 small{ display:inline-block; margin:0 0 0 1em; }
   .sec-head{ grid-template-columns:1fr; gap:1.2em 0; }
@@ -793,19 +748,19 @@ section + section .wrap::before{
     <h1 class="names cv cv2">
       Shusaku
       <span class="amp">and</span>
-      Hanako
+      Chihiro
     </h1>
-    <p class="names-jp cv cv3">〇〇　修作 ・ 〇〇　花子</p>
+    <p class="names-jp cv cv3">本藤　周作 ・ 本藤　ちひろ</p>
 
     <div class="cover-rule cv cv4"></div>
 
     <div class="cover-meta cv cv5">
-      <p class="date" style="margin:0"><span class="tbd">2026 . 10 . 10</span></p>
-      <p class="place" style="margin:0">軽井沢　矢ヶ崎チャペル</p>
+      <p class="date" style="margin:0">2026 . 10 . 16</p>
+      <p class="place" style="margin:0">軽井沢　矢ケ崎チャペル</p>
     </div>
 
     <p class="cover-note cv cv6">
-      家族だけの、小さな一日です。<br>
+      家族だけの一日です。<br>
       当日の流れとご案内をまとめました。
     </p>
   </div>
@@ -838,33 +793,7 @@ section + section .wrap::before{
         当日の集合時間・会場・宿泊のご案内をまとめました。
         当日はこのページを開いてご確認ください。
       </p>
-      <p class="sign rv d4">二〇二六年　初秋<br><strong>修作 ・ 花子</strong></p>
-    </div>
-  </section>
-
-  <!-- ============ チャペルの写真 ============ -->
-  <section class="photos">
-    <div class="wrap">
-      <div class="spread">
-        <figure class="ph shot-main rv" data-label="Nave">
-          <div class="slot">
-            <em>チャペルの内観</em>
-            <code>images/chapel-nave.jpg</code>
-          </div>
-          <img src="images/chapel-nave.jpg" alt="矢ヶ崎チャペルの内観。中央の通路とシャンデリア">
-        </figure>
-        <figure class="ph shot-sub rv d2" data-label="Light">
-          <div class="slot">
-            <em>灯り</em>
-            <code>images/chapel-chandelier.jpg</code>
-          </div>
-          <img src="images/chapel-chandelier.jpg" alt="チャペルのシャンデリア" loading="lazy">
-        </figure>
-        <div class="spread-side rv d1">
-          <span class="en">The Chapel</span>
-          <p class="spread-note">高原の林のなかに、ちいさな教会があります。</p>
-        </div>
-      </div>
+      <p class="sign rv d4">二〇二六年　初秋<br><strong>周作 ・ ちひろ</strong></p>
     </div>
   </section>
 
@@ -877,122 +806,109 @@ section + section .wrap::before{
           <span class="sec-en">Schedule</span>
           <h2>当日のながれ</h2>
         </div>
-        <p class="lead">集合は <span class="num">15:30</span>、挙式は <span class="num">16:00</span> 開始です。<br>お式は遅くとも <span class="num">17:30</span> には終わります。</p>
+        <p class="lead">集合は <span class="num">15:30</span>、挙式は <span class="num">16:00</span> 開始です。<br>お式は <span class="num">17:30</span> ごろに終わります。</p>
       </div>
 
       <ol class="tl rv d1">
         <li>
-          <div class="t">14:00</div>
+          <div class="t">15:00</div>
           <div>
-            <p class="ttl">軽井沢駅 到着</p>
-            <p class="sub">駅の<strong style="font-weight:500">北口</strong>からホテルまで徒歩約10分（タクシーなら約3分）。<br>ホテルの無料送迎もあります（<span class="num">9:00〜18:00</span>／北口に着いたらホテルへお電話ください）。</p>
+            <p class="ttl">ホテル チェックイン</p>
+            <p class="sub">チェックインは <span class="num">15:00</span> から。この時間を目安にお越しください。<br>お部屋でお支度を整えていただけます。</p>
           </div>
         </li>
         <li>
           <div class="t">15:30</div>
           <div>
-            <p class="ttl">集合・受付</p>
-            <p class="sub">ホテルのロビーにお集まりください。チャペルは裏手、歩いてすぐです。<br>お手洗い・身支度はこちらで。</p>
+            <p class="ttl">集合</p>
+            <p class="sub">ホテルのロビーにお集まりください。<br>チャペルは裏手、歩いてすぐです。</p>
+          </div>
+        </li>
+        <li>
+          <div class="t">15:50</div>
+          <div>
+            <p class="ttl">チャペルへご案内</p>
+            <p class="sub">係の方のご案内で、チャペルへ移動して着席します。</p>
           </div>
         </li>
         <li class="key">
           <div class="t">16:00</div>
           <div>
             <p class="ttl">挙式<small>Ceremony</small></p>
-            <p class="sub">所要 約30分。写真撮影を含めて <span class="num">17:30</span> ごろまで。</p>
+            <p class="sub">所要 約30分。</p>
+          </div>
+        </li>
+        <li>
+          <div class="t">16:30</div>
+          <div>
+            <p class="ttl">写真撮影・ご歓談</p>
+            <p class="sub">チャペルとその周辺で、ご家族の集合写真を撮ります。</p>
           </div>
         </li>
         <li>
           <div class="t">17:30</div>
           <div>
-            <p class="ttl">記念撮影・小休憩</p>
-            <p class="sub">チャペル前の林でご家族の集合写真を撮ります。お部屋でひと休みいただけます。</p>
-          </div>
-        </li>
-        <li>
-          <div class="t">18:15</div>
-          <div>
-            <p class="ttl">会食会場へ</p>
-            <p class="sub"><span class="tbd">会場は調整中</span>です。ホテル内であればそのまま、外であれば車で向かいます。</p>
+            <p class="ttl">挙式終了</p>
+            <p class="sub">お食事まで少し時間があります。お部屋でひと休みください。</p>
           </div>
         </li>
         <li>
           <div class="t">18:30</div>
           <div>
             <p class="ttl">お食事会</p>
-            <p class="sub"><span class="tbd">軽井沢〇〇（調整中）</span>／個室を予約しています。2時間ほどを予定。</p>
+            <p class="sub"><span class="tbd">会場は調整中</span>です。2時間ほどを予定しています。</p>
           </div>
         </li>
         <li>
           <div class="t">20:30</div>
           <div>
-            <p class="ttl">解散・ご宿泊先へ</p>
-            <p class="sub">そのままホテルマロウド軽井沢のお部屋へお戻りください。翌朝の予定は自由行動です。</p>
+            <p class="ttl">解散・お部屋へ</p>
+            <p class="sub">そのままホテルのお部屋へお戻りください。翌朝の予定は自由行動です。</p>
           </div>
         </li>
       </ol>
 
       <div class="callout rv d2">
         <p class="lbl en">Please note</p>
-        <p>
-          軽井沢は夕方から冷えます（<span class="num">17</span>時以降は上着があると安心です）。<br>
-          時間が前後する場合は、当日グループLINEでお知らせします。
-        </p>
+        <p>時間が前後する場合は、当日グループLINEでお知らせします。</p>
       </div>
     </div>
   </section>
 
-  <!-- ============ 会場 ============ -->
-  <section id="access">
+  <!-- ============ 挙式会場 ============ -->
+  <section id="chapel">
     <div class="wrap">
       <div class="sec-head rv">
         <div class="sec-num">弐</div>
         <div>
-          <span class="sec-en">Venues</span>
-          <h2>会場のご案内</h2>
+          <span class="sec-en">Chapel</span>
+          <h2>矢ケ崎チャペル</h2>
         </div>
-        <p class="lead">挙式・ご宿泊とも「ホテルマロウド軽井沢」。軽井沢駅 北口から徒歩10分です。<br>矢ヶ崎チャペルはホテルの裏手、林のなかに建つ独立したチャペル。<br>式のあとの移動はありません。</p>
+        <p class="lead">林のなかに建つ、独立したチャペルです。</p>
       </div>
 
+      <figure class="ph venue-photo rv d1" data-label="Chapel">
+        <div class="slot"><em>チャペルの内観</em><code>images/chapel-nave.jpg</code></div>
+        <img src="images/chapel-nave.jpg" alt="矢ケ崎チャペルの内観。中央の通路とシャンデリア">
+      </figure>
+
       <div class="duo">
-        <div class="card rv d1">
-          <figure class="ph" data-label="Chapel">
-            <div class="slot"><em>チャペルの写真</em><code>images/chapel-exterior.jpg</code></div>
-            <img src="images/chapel-exterior.jpg" alt="林のなかに建つ矢ヶ崎チャペルの外観" loading="lazy">
-          </figure>
-          <span class="en">Chapel</span>
-          <h3>矢ヶ崎チャペル</h3>
-          <p>ホテルマロウド軽井沢 敷地内</p>
+        <div class="card plain rv d2">
+          <span class="en">Address</span>
           <dl>
             <dt>住所</dt><dd>〒389-0102<br>長野県北佐久郡軽井沢町軽井沢 1178</dd>
-            <dt>電話</dt><dd class="num">0267-42-8444<br><small style="letter-spacing:.1em">ホテル代表 / 8:00〜21:00</small></dd>
-            <dt>駅から</dt><dd>軽井沢駅 北口より徒歩約10分<br>タクシーなら約3分</dd>
+            <dt>ホテルから</dt><dd>裏手すぐ（徒歩1分）</dd>
           </dl>
-          <div class="map">
-            <iframe src="https://www.google.com/maps?q=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=16&amp;output=embed"
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="矢ヶ崎チャペルの地図"></iframe>
-          </div>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2%20%E7%9F%A2%E3%83%B6%E5%B4%8E%E3%83%81%E3%83%A3%E3%83%9A%E3%83%AB"
-             target="_blank" rel="noopener">マップで開く</a>
         </div>
-        <div class="card rv d2">
-          <figure class="ph" data-label="Dinner">
-            <div class="slot"><em>お食事会場の写真</em><code>images/dinner.jpg</code></div>
-            <img src="images/dinner.jpg" alt="お食事会場">
-          </figure>
-          <span class="en">Dinner</span>
-          <h3>お食事会場</h3>
-          <p><span class="tbd">軽井沢〇〇（調整中）</span></p>
-          <dl>
-            <dt>住所</dt><dd><span class="tbd">長野県北佐久郡軽井沢町〇〇</span></dd>
-            <dt>開始</dt><dd class="num">18:30</dd>
-            <dt>備考</dt><dd>個室・お子様の椅子あり</dd>
-          </dl>
+        <div class="card plain rv d3">
+          <span class="en">Map</span>
+          <!-- クエリの「矢ヶ崎」は小書きの ヶ。この綴りで Google Maps が
+               矢ケ崎チャペルを正しく特定するので、表記とは別にこのまま置いています -->
           <div class="map">
-            <iframe src="https://www.google.com/maps?q=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%A7%85&amp;z=14&amp;output=embed"
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="お食事会場の地図"></iframe>
+            <iframe src="https://www.google.com/maps?q=%E7%9F%A2%E3%83%B6%E5%B4%8E%E3%83%81%E3%83%A3%E3%83%9A%E3%83%AB%20%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=17&amp;output=embed"
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="矢ケ崎チャペルの地図"></iframe>
           </div>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%A7%85"
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%9F%A2%E3%83%B6%E5%B4%8E%E3%83%81%E3%83%A3%E3%83%9A%E3%83%AB%20%E8%BB%BD%E4%BA%95%E6%B2%A2"
              target="_blank" rel="noopener">マップで開く</a>
         </div>
       </div>
@@ -1008,7 +924,7 @@ section + section .wrap::before{
           <span class="sec-en">Stay</span>
           <h2>ご宿泊について</h2>
         </div>
-        <p class="lead">全員分の客室をこちらで確保しています。<br>チェックインは到着後、式の前に済ませておくとスムーズです。</p>
+        <p class="lead">全員分の客室をこちらで確保しています（宿泊費は手配済みです）。<br>チェックインは到着後、式の前に済ませてください。<br>チャペルには控室がないため、お支度はお部屋でお願いします。</p>
       </div>
 
       <div class="duo">
@@ -1019,12 +935,16 @@ section + section .wrap::before{
           </figure>
           <span class="en">Hotel</span>
           <h3>ホテルマロウド軽井沢</h3>
-          <p>矢ヶ崎チャペルと同じ敷地です。式のあとはそのままお部屋へお戻りいただけます。</p>
+          <p>軽井沢駅 <strong style="font-weight:500">北口</strong>より徒歩約10分、タクシーなら約3分です。<br>ホテルの無料送迎もあります（<span class="num">9:00〜18:00</span>／北口に着いたらホテルへお電話ください）。</p>
           <dl>
             <dt>住所</dt><dd>〒389-0102<br>長野県北佐久郡軽井沢町軽井沢 1178</dd>
             <dt>電話</dt><dd class="num">0267-42-8444</dd>
+            <dt>朝食</dt><dd><span class="tbd">7:00 – 10:00 ／ 1階</span></dd>
             <dt>IN / OUT</dt><dd class="num">15:00 / 11:00</dd>
           </dl>
+        </div>
+        <div class="card plain rv d2">
+          <span class="en">Map</span>
           <div class="map">
             <iframe src="https://www.google.com/maps?q=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=16&amp;output=embed"
                     loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="ホテルの地図"></iframe>
@@ -1032,14 +952,34 @@ section + section .wrap::before{
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2"
              target="_blank" rel="noopener">マップで開く</a>
         </div>
-        <div class="card rv d2">
-          <span class="en">Check-in</span>
-          <h3>チェックイン・お支払い</h3>
-          <p>お部屋は到着後すぐお使いいただけます。大きなお荷物は先に置いて、身軽に式へお越しください。</p>
-          <p>宿泊費はこちらで手配済みです。お食事・お飲み物などの追加分のみ、チェックアウト時にご精算をお願いします。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ お食事会場 ============ -->
+  <section id="dinner">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-num">肆</div>
+        <div>
+          <span class="sec-en">Dinner</span>
+          <h2>お食事会場</h2>
+        </div>
+        <p class="lead">式のあと、みんなで夕食を囲みます。<br><span class="tbd">会場は調整中</span>です。決まりしだいこのページを更新します。</p>
+      </div>
+
+      <div class="duo">
+        <div class="card rv d1">
+          <figure class="ph narrow" data-label="Dinner">
+            <div class="slot"><em>お食事会場の写真</em><code>images/dinner.jpg</code></div>
+            <img src="images/dinner.jpg" alt="お食事会場">
+          </figure>
+          <span class="en">Dinner</span>
+          <h3><span class="tbd">会場は調整中</span></h3>
           <dl>
-            <dt>朝食</dt><dd><span class="tbd">7:00 – 10:00 ／ 1階</span></dd>
-            <dt>翌朝</dt><dd>お集まりの予定はありません</dd>
+            <dt>日時</dt><dd class="num">10/16（金） 18:30 〜</dd>
+            <dt>所要</dt><dd>2時間ほど</dd>
+            <dt>備考</dt><dd><span class="tbd">個室・お子さまの椅子あり</span></dd>
           </dl>
         </div>
       </div>
@@ -1050,21 +990,21 @@ section + section .wrap::before{
   <section id="guests">
     <div class="wrap">
       <div class="sec-head rv">
-        <div class="sec-num">肆</div>
+        <div class="sec-num">伍</div>
         <div>
           <span class="sec-en">Guests</span>
           <h2>参列するみなさま</h2>
         </div>
-        <p class="lead">総勢 <span class="num">9</span> 名。ちいさな、家族だけの一日です。</p>
+        <p class="lead">総勢 <span class="num">10</span> 名。家族だけの一日です。</p>
       </div>
 
       <div class="roster">
         <div class="roster-center rv d1">
           <span class="en">The Family</span>
           <div class="fam">
-            <span>〇〇 修作<small>Groom</small></span>
-            <span>〇〇 花子<small>Bride</small></span>
-            <span>〇〇 〇〇<small>Son &middot; 2</small></span>
+            <span>本藤 周作<small>Groom</small></span>
+            <span>本藤 ちひろ<small>Bride</small></span>
+            <span>本藤 千惺<small>Son</small></span>
           </div>
         </div>
 
@@ -1072,24 +1012,23 @@ section + section .wrap::before{
           <div class="side rv d2">
             <h3>新郎の家族</h3>
             <ul>
-              <li><em>父</em><b>〇〇 〇〇</b></li>
-              <li><em>母</em><b>〇〇 〇〇</b></li>
-              <li><em>弟</em><b>〇〇 〇〇</b></li>
+              <li><em>父</em><b>本藤 明雄</b></li>
+              <li><em>母</em><b>本藤 文華</b></li>
+              <li><em>弟</em><b>本藤 寛</b></li>
             </ul>
             <p class="count">3 &nbsp;from&nbsp; Okayama</p>
           </div>
           <div class="side rv d3">
             <h3>新婦の家族</h3>
             <ul>
-              <li><em>父</em><b>〇〇 〇〇</b></li>
-              <li><em>母</em><b>〇〇 〇〇</b></li>
-              <li><em>姉妹</em><b>〇〇 〇〇</b></li>
+              <li><em>父</em><b>染谷 洋</b></li>
+              <li><em>母</em><b>染谷 月子</b></li>
+              <li><em>姉</em><b>染谷 はるひ</b></li>
+              <li><em>妹</em><b>染谷 美月</b></li>
             </ul>
-            <p class="count">3 &nbsp;from&nbsp; Tennodai</p>
+            <p class="count">4 &nbsp;from&nbsp; Tennodai</p>
           </div>
         </div>
-
-        <p class="roster-note rv d4">お名前は<span class="tbd">仮置き</span>です。ご記帳のとおりに差し替えます。</p>
       </div>
     </div>
   </section>
@@ -1098,7 +1037,7 @@ section + section .wrap::before{
   <section id="notes">
     <div class="wrap">
       <div class="sec-head rv">
-        <div class="sec-num">伍</div>
+        <div class="sec-num">陸</div>
         <div>
           <span class="sec-en">Notes</span>
           <h2>ご案内</h2>
@@ -1107,24 +1046,21 @@ section + section .wrap::before{
 
       <div class="notes rv d1">
         <div class="note">
-          <h3>お召しもの<small>Dress code</small></h3>
-          <p>かしこまりすぎない略礼装で。男性はダークスーツ、女性はワンピースなど。<br>チャペル周辺は砂利道があるため、ヒールの高い靴はお控えいただくと安心です。</p>
-        </div>
-        <div class="note">
           <h3>気候<small>Weather</small></h3>
-          <p><span class="tbd">10月</span>の軽井沢は、日中<span class="num">18</span>℃前後・夕方は<span class="num">10</span>℃を下回ることもあります。羽織るものを一枚お持ちください。</p>
+          <p>10月中旬の軽井沢は、日中でも <span class="num">15</span>℃ 前後。朝晩は <span class="num">5</span>℃ を下回る日もあります。<br>東京より一枚も二枚も多いくらいの、しっかりあたたかい服装でお越しください。コートやマフラーがあっても早すぎることはありません。</p>
         </div>
         <div class="note">
-          <h3>お子さま<small>With our son</small></h3>
-          <p>2歳の息子も一緒に参列します。式中に泣いてしまってもどうかご容赦ください。ベビーカーはチャペルのロビーに置けます。</p>
-        </div>
-        <div class="note">
-          <h3>撮影<small>Photograph</small></h3>
-          <p>プロのカメラマンが入ります。挙式中の撮影は着席のままお願いします。<br>撮影データは後日、共有アルバムでお渡しします。</p>
-        </div>
-        <div class="note">
-          <h3>ご祝儀<small>Gift</small></h3>
-          <p>家族だけの会ですので、ご祝儀・お祝いのお品はどうぞお気遣いなく。<br>来てくださることが何よりの贈りものです。</p>
+          <h3>まわりを歩く<small>Around</small></h3>
+          <div>
+            <p>翌朝は自由行動です。ホテルから歩ける範囲だけでも、いくつか。</p>
+            <p>
+              <strong>雲場池</strong> — 徒歩10分ほど。水面に木立が映る池。10月中旬は紅葉の走りの時期です。<br>
+              <strong>旧軽井沢銀座</strong> — 徒歩15分ほど。パン屋やジャム屋が並ぶ通り。<br>
+              <strong>軽井沢プリンスショッピングプラザ</strong> — 駅の南口すぐ。<br>
+              <strong>ハルニレテラス</strong> — 車で15分ほど。川沿いの木立のなかのお店。
+            </p>
+            <p class="fine">所要時間はいずれも目安です。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1145,7 +1081,7 @@ section + section .wrap::before{
     <div class="contact">
       <p class="lbl en" style="margin:0">Contact</p>
       <p class="num" style="margin:0"><span class="tbd"><a href="tel:09000000000">090-0000-0000</a></span></p>
-      <p style="margin:0; font-size:.76rem; letter-spacing:.2em; color:rgba(244,241,233,.6)">修作（新郎）まで</p>
+      <p style="margin:0; font-size:.76rem; letter-spacing:.2em; color:rgba(244,241,233,.6)">周作（新郎）まで</p>
     </div>
 
     <p class="fin">〈仮〉表記は確定後に更新します</p>
@@ -1155,7 +1091,7 @@ section + section .wrap::before{
 <nav class="quickbar" aria-label="当日のショートカット">
   <ul>
     <li><a href="#schedule"><b>15:30</b><span>集合</span></a></li>
-    <li><a href="#access"><b>MAP</b><span>会場</span></a></li>
+    <li><a href="#chapel"><b>MAP</b><span>会場</span></a></li>
     <li><a href="tel:09000000000"><b>TEL</b><span>連絡</span></a></li>
   </ul>
 </nav>
@@ -1163,8 +1099,9 @@ section + section .wrap::before{
 <nav class="dots" aria-label="目次">
   <a href="#greeting"><span>ごあいさつ</span><i></i></a>
   <a href="#schedule"><span>当日のながれ</span><i></i></a>
-  <a href="#access"><span>会場</span><i></i></a>
+  <a href="#chapel"><span>チャペル</span><i></i></a>
   <a href="#stay"><span>ご宿泊</span><i></i></a>
+  <a href="#dinner"><span>お食事</span><i></i></a>
   <a href="#guests"><span>参列者</span><i></i></a>
   <a href="#notes"><span>ご案内</span><i></i></a>
 </nav>
