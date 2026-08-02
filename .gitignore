@@ -1,0 +1,21 @@
+# OS
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# エディタ
+.vscode/
+.idea/
+*.swp
+
+# 写真の元データ（重いので上げない。images/ には書き出し後のJPEGだけを置く）
+*.psd
+*.ai
+*.RAF
+*.CR2
+*.CR3
+*.NEF
+*.ARW
+*.HEIC
+*.heic
