@@ -125,14 +125,18 @@ img,svg{ max-width:100%; display:block; }
 .on-ink .tbd::after{ color:var(--brass-lt); }
 
 /* ===== 表紙 =============================================== */
+/* 中央に積み上げるのをやめ、左下に一本の軸で組む。
+   写真は「敷き物」ではなく画面そのもの、文字はその上に置いた小さな版面 */
 .cover{
   position:relative;
   min-height:100svh;
   background:var(--ink);
   color:var(--paper);
-  display:grid;
-  place-items:center;
-  padding:clamp(48px,10vh,110px) var(--gut);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding:clamp(30px,6vh,66px) var(--gut) clamp(38px,8vh,88px);
   overflow:hidden;
   isolation:isolate;
 }
@@ -151,37 +155,25 @@ img,svg{ max-width:100%; display:block; }
   from{ transform:translate3d(-1.5%,0,0) scale(1); }
   to  { transform:translate3d(2%,-2%,0) scale(1.07); }
 }
-/* 表紙の写真（あれば背景に敷く）
-   墨緑に沈めた二階調ふう。写真そのものより「空気」を見せる */
+/* 表紙の写真。以前より明るく起こして、建物が見えるようにした */
 .cover-photo{ position:absolute; inset:0; z-index:-3; overflow:hidden; }
 .cover-photo img{
-  width:100%; height:100%; object-fit:cover; object-position:50% 42%;
-  opacity:.46;
-  filter:grayscale(.88) contrast(1.12) brightness(.82);
-  animation:kenburns 30s ease-in-out infinite alternate;
+  width:100%; height:100%; object-fit:cover; object-position:50% 38%;
+  opacity:.72;
+  filter:grayscale(.58) contrast(1.04) brightness(.94);
+  animation:kenburns 34s ease-in-out infinite alternate;
 }
-/* 墨のかぶせ＋上下の締め＋真鍮のにじみ */
+/* かぶせは左下を重く。文字が乗る側だけ沈めて、右上は写真を見せる */
 .cover-photo::after{
   content:""; position:absolute; inset:0;
   background:
-    radial-gradient(108% 72% at 50% 16%, rgba(201,174,124,.14), transparent 58%),
-    radial-gradient(120% 96% at 50% 46%, transparent 34%, rgba(22,33,28,.72) 100%),
-    linear-gradient(180deg, rgba(22,33,28,.62) 0%, rgba(22,33,28,.28) 34%, rgba(22,33,28,.78) 78%, var(--ink) 100%);
+    radial-gradient(66% 44% at 64% 20%, rgba(201,174,124,.10), transparent 68%),
+    linear-gradient(78deg, rgba(22,33,28,.82) 0%, rgba(22,33,28,.32) 46%, transparent 74%),
+    linear-gradient(180deg, rgba(22,33,28,.66) 0%, rgba(22,33,28,.24) 26%, rgba(22,33,28,.44) 56%, rgba(22,33,28,.93) 100%);
 }
-@keyframes kenburns{ from{ transform:scale(1.05) } to{ transform:scale(1.13) } }
-
-/* 罫の額 */
-.cover-frame{
-  position:absolute; z-index:1; pointer-events:none;
-  inset:clamp(12px,2.2vw,26px);
-  border:.5px solid rgba(244,241,233,.20);
-}
-.cover-frame::before,.cover-frame::after{
-  content:""; position:absolute; width:clamp(14px,2vw,22px); height:clamp(14px,2vw,22px);
-  border:0 solid var(--brass-lt); opacity:.55;
-}
-.cover-frame::before{ top:-1px; left:-1px; border-top-width:1px; border-left-width:1px; }
-.cover-frame::after{ bottom:-1px; right:-1px; border-bottom-width:1px; border-right-width:1px; }
+@keyframes kenburns{ from{ transform:scale(1.04) } to{ transform:scale(1.12) } }
+/* 写真があるときは霧を薄く（重ねると濁る） */
+.cover.has-photo::before{ opacity:.4; }
 
 /* 稜線（浅間山） */
 .ridge{
@@ -194,111 +186,60 @@ img,svg{ max-width:100%; display:block; }
 /* 写真を敷いたときは稜線を引っこめる（重なると絵が濁る） */
 .cover.has-photo .ridge{ display:none; }
 
+/* 天：小さな標題だけ */
+.cover-label{
+  position:relative; z-index:2; margin:0;
+  font-family:var(--en); font-weight:500;
+  font-size:.6rem; letter-spacing:.52em; text-transform:uppercase;
+  color:var(--brass-lt);
+}
+
+/* 地：日付 → 罫 → 名前 → 和名 → 会場、の一本の軸 */
 .cover-inner{
-  text-align:center; max-width:720px; position:relative; z-index:2;
-  padding-bottom:clamp(30px,8vh,84px);
+  position:relative; z-index:2;
+  max-width:min(100%,760px);
 }
-
-.kicker{ color:var(--brass-lt); margin-bottom:clamp(28px,5vh,52px); }
-.kicker span{ display:inline-block; }
-.kicker::after{
-  content:""; display:block; width:1px; height:38px;
-  background:linear-gradient(var(--brass-lt), transparent);
-  margin:20px auto 0;
+.cover-date{
+  margin:0;
+  font-family:var(--en);
+  font-size:clamp(.9rem,2.6vw,1.04rem);
+  letter-spacing:.44em;
+  color:rgba(244,241,233,.74);
 }
-
+.cover-date::after{
+  content:""; display:block;
+  width:34px; height:1px; background:var(--brass-lt);
+  margin-top:clamp(15px,2.6vh,22px);
+}
 .names{
   font-family:var(--en);
   font-weight:300;
-  font-size:clamp(3.1rem, 11vw, 6.6rem);
-  line-height:1.02;
-  letter-spacing:.02em;
-  margin:0;
+  font-size:clamp(2.85rem,10.5vw,5.6rem);
+  line-height:1.0;
+  letter-spacing:.005em;
+  margin:clamp(16px,2.6vh,24px) 0 0;
 }
-.names .amp{
-  display:block;
+.names .ln{ display:block; }
+.names .ln i{
   font-style:italic;
-  font-size:.42em;
+  font-size:.4em;
+  letter-spacing:.03em;
   color:var(--brass-lt);
-  margin:.16em 0 .1em;
-  letter-spacing:.04em;
+  margin-right:.32em;
+  vertical-align:.1em;
 }
 .names-jp{
-  margin:clamp(20px,3.4vh,34px) 0 0;
-  font-size:.98rem;
-  letter-spacing:.5em;
-  text-indent:.5em;
-  color:rgba(244,241,233,.78);
-  font-weight:500;
+  margin:clamp(20px,3vh,32px) 0 0;
+  font-size:.84rem; font-weight:500;
+  letter-spacing:.34em;
+  color:rgba(244,241,233,.82);
 }
-
-.cover-rule{
-  width:min(320px,62%); height:1px;
-  background:linear-gradient(90deg, transparent, var(--rule-lt) 22%, var(--rule-lt) 78%, transparent);
-  margin:clamp(30px,5vh,48px) auto;
-}
-
-.cover-meta{
-  display:flex; flex-wrap:wrap; justify-content:center;
-  align-items:baseline; gap:clamp(14px,4vw,34px);
-}
-.cover-meta .date{
-  font-family:var(--en);
-  font-size:clamp(1.4rem,4.4vw,2.05rem);
-  font-weight:400; letter-spacing:.14em;
-  color:var(--paper);
-}
-.cover-meta .place{
-  font-size:.78rem; letter-spacing:.34em; text-indent:.34em;
-  color:rgba(244,241,233,.7);
-}
-.cover-note{
-  margin-top:clamp(26px,4.5vh,40px);
-  font-size:.72rem; line-height:1.9;
-  color:rgba(244,241,233,.45);
-  letter-spacing:.12em;
-}
-
-/* 縦書きの背表紙 */
-.spine{
-  position:absolute; z-index:2;
-  top:clamp(28px,7vh,64px); right:clamp(16px,4vw,54px);
-  writing-mode:vertical-rl;
-  font-size:.82rem;
-  letter-spacing:.62em;
+.cover-place{
+  margin:clamp(9px,1.5vh,15px) 0 0;
+  font-size:.7rem; letter-spacing:.28em;
   color:rgba(244,241,233,.5);
-  font-weight:500;
 }
-.spine::after{
-  content:""; display:block;
-  width:1px; height:clamp(48px,9vh,96px);
-  background:linear-gradient(rgba(244,241,233,.35), transparent);
-  margin:1.4em auto 0;
-}
-.folio{
-  position:absolute; z-index:2;
-  bottom:clamp(22px,5vh,44px); left:clamp(16px,4vw,54px);
-  color:rgba(244,241,233,.4);
-}
-.scroll-cue{
-  position:absolute; z-index:2;
-  bottom:clamp(22px,5vh,44px); left:50%; transform:translateX(-50%);
-  display:flex; flex-direction:column; align-items:center; gap:12px;
-  color:rgba(244,241,233,.45);
-}
-.scroll-cue i{
-  display:block; width:1px; height:46px; overflow:hidden;
-  background:rgba(244,241,233,.16); position:relative;
-}
-.scroll-cue i::after{
-  content:""; position:absolute; inset:0;
-  background:var(--brass-lt);
-  animation:cue 2.6s cubic-bezier(.7,0,.3,1) infinite;
-}
-@keyframes cue{
-  0%{ transform:translateY(-100%); }
-  55%,100%{ transform:translateY(100%); }
-}
+
 
 /* ===== レイアウト ========================================= */
 main{ position:relative; }
@@ -371,15 +312,16 @@ section + section .wrap::before{
 .sign strong{ font-weight:500; letter-spacing:.34em; }
 
 /* ===== タイムライン ======================================= */
-.tl{ list-style:none; margin:0; padding:0; position:relative; }
+/* --col : 時刻の段の幅。罫線・丸・グリッドが全部これを基準にする */
+.tl{ list-style:none; margin:0; padding:0; position:relative; --col:5.2em; }
 .tl::before{
   content:""; position:absolute; top:.7em; bottom:2.4em;
-  left:calc(4.6em + .5px);
+  left:calc(var(--col) + .5px);
   width:1px; background:var(--rule);
 }
 .tl li{
   display:grid;
-  grid-template-columns:4.6em 1fr;
+  grid-template-columns:var(--col) 1fr;
   gap:0 clamp(20px,4vw,38px);
   padding-block:clamp(13px,2.4vh,20px);
   position:relative;
@@ -390,6 +332,7 @@ section + section .wrap::before{
   font-size:1.06rem; letter-spacing:.1em;
   color:rgba(22,33,28,.72);
   padding-top:.16em;
+  padding-right:18px;   /* 数字と丸をくっつけない */
   text-align:right;
   font-variant-numeric:tabular-nums;
 }
@@ -420,16 +363,6 @@ section + section .wrap::before{
   display:block; font-family:var(--en); font-size:.5em;
   letter-spacing:.4em; color:var(--brass); margin-top:.7em; font-weight:400;
 }
-
-.callout{
-  margin-top:clamp(30px,5vh,46px);
-  border:.5px solid var(--rule);
-  background:rgba(255,255,255,.42);
-  padding:clamp(18px,3.6vw,26px) clamp(20px,4vw,30px);
-  display:grid; gap:.55em;
-}
-.callout .lbl{ color:var(--brass); }
-.callout p{ margin:0; font-size:.84rem; line-height:2.1; }
 
 /* ===== 会場の一枚 ======================================== */
 /* 章の頭に置く大きな写真。元データ 1000×650 を超えて拡大しないよう
@@ -546,10 +479,10 @@ section + section .wrap::before{
   padding:.9em .4em 1em; text-decoration:none; color:rgba(244,241,233,.8);
 }
 .quickbar b{
-  font-family:var(--en); font-weight:500; font-size:.95rem;
-  letter-spacing:.12em; color:var(--brass-lt);
+  font-family:var(--en); font-weight:400; font-size:.82rem;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--brass-lt);
 }
-.quickbar span{ font-size:.6rem; letter-spacing:.24em; }
+.quickbar span{ font-size:.6rem; letter-spacing:.2em; }
 
 /* ===== 参列者 ============================================ */
 .roster{ display:grid; gap:clamp(28px,5vh,44px); }
@@ -632,15 +565,6 @@ section + section .wrap::before{
   font-size:clamp(.95rem,2.8vw,1.12rem); line-height:2.5;
   color:rgba(244,241,233,.9);
 }
-.contact{
-  margin:clamp(40px,7vh,64px) auto 0;
-  display:inline-grid; gap:.7em;
-  padding:clamp(20px,4vw,28px) clamp(28px,6vw,48px);
-  border:.5px solid rgba(244,241,233,.2);
-}
-.contact .lbl{ color:var(--brass-lt); }
-.contact a{ color:var(--paper); text-decoration:none; border-bottom:1px solid rgba(244,241,233,.3); }
-.contact .num{ font-size:1.16rem; letter-spacing:.14em; }
 .colophon .fin{
   margin-top:clamp(46px,8vh,76px);
   font-family:var(--en); font-size:.62rem; letter-spacing:.4em;
@@ -687,10 +611,6 @@ section + section .wrap::before{
 .cv4{ animation-delay:1.02s } .cv5{ animation-delay:1.26s } .cv6{ animation-delay:1.5s }
 @keyframes rise{ to{ opacity:1; transform:none; } }
 
-@media (max-height:700px){
-  .scroll-cue{ display:none; }
-}
-
 @media (prefers-reduced-motion:reduce){
   *{ animation:none !important; transition:none !important; }
   .rv,.cv{ opacity:1 !important; transform:none !important; }
@@ -712,20 +632,21 @@ section + section .wrap::before{
   .sec-num{ grid-row:auto; }
   .sec-head .lead{ grid-column:1; }
   .dots{ display:none; }
-  .spine{ letter-spacing:.5em; font-size:.72rem; }
 }
 
 /* ===== 印刷 ============================================== */
 @media print{
   body{ background:#fff; }
-  body::after,.dots,.scroll-cue,.quickbar,.map,.btn{ display:none !important; }
+  body::after,.dots,.quickbar,.map,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
-  .cover::before,.ridge{ display:none; }
-  .names-jp,.cover-meta .place,.cover-note,.spine,.folio{ color:#333; }
+  .cover::before,.ridge,.cover-photo{ display:none; }
+  .cover-label,.cover-date{ color:#8a6f3d; }
+  .names,.names-jp{ color:#000; }
+  .cover-place{ color:#333; }
   .colophon{ background:#fff; color:#000; }
   .colophon::before{ display:none; }
-  .colophon .msg,.contact a{ color:#000; }
+  .colophon .msg{ color:#000; }
   section{ page-break-inside:avoid; padding-block:28px; }
   .rv,.cv{ opacity:1 !important; transform:none !important; }
 }
@@ -737,37 +658,19 @@ section + section .wrap::before{
 <header class="cover on-ink" id="cover">
   <!-- images/cover.jpg を置くと表紙の背景写真になります（無ければ何も出ません） -->
   <div class="cover-photo"><img src="images/cover.jpg" alt=""></div>
-  <div class="cover-frame" aria-hidden="true"></div>
 
-  <div class="spine">結婚式のご案内</div>
-  <div class="folio en">Karuizawa &middot; Nagano</div>
+  <p class="cover-label cv cv1">Wedding Invitation</p>
 
   <div class="cover-inner">
-    <p class="kicker en cv cv1"><span>Wedding Invitation &amp; Guide</span></p>
-
-    <h1 class="names cv cv2">
+    <p class="cover-date cv cv2">2026 . 10 . 16</p>
+    <h1 class="names cv cv3">
       Shusaku
-      <span class="amp">and</span>
-      Chihiro
+      <span class="ln"><i>and</i>Chihiro</span>
     </h1>
-    <p class="names-jp cv cv3">本藤　周作 ・ 本藤　ちひろ</p>
-
-    <div class="cover-rule cv cv4"></div>
-
-    <div class="cover-meta cv cv5">
-      <p class="date" style="margin:0">2026 . 10 . 16</p>
-      <p class="place" style="margin:0">軽井沢　矢ケ崎チャペル</p>
-    </div>
-
-    <p class="cover-note cv cv6">
-      家族だけの一日です。<br>
-      当日の流れとご案内をまとめました。
-    </p>
+    <p class="names-jp cv cv4">本藤 周作　・　本藤 ちひろ</p>
+    <p class="cover-place cv cv5">矢ケ崎チャペル　／　軽井沢</p>
   </div>
 
-  <a class="scroll-cue en" href="#greeting" aria-label="本文へ">
-    <span>Scroll</span><i></i>
-  </a>
 
   <svg class="ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
     <path class="r1" d="M0,150 L180,96 L300,124 L470,54 L620,110 L760,72 L900,128 L1060,60 L1220,116 L1340,88 L1440,132 L1440,220 L0,220 Z"/>
@@ -806,7 +709,7 @@ section + section .wrap::before{
           <span class="sec-en">Schedule</span>
           <h2>当日のながれ</h2>
         </div>
-        <p class="lead">集合は <span class="num">15:30</span>、挙式は <span class="num">16:00</span> 開始です。<br>お式は <span class="num">17:30</span> ごろに終わります。</p>
+        <p class="lead">集合は <span class="num">15:50</span>、挙式は <span class="num">16:00</span> 開始です。<br>お式は <span class="num">17:30</span> ごろに終わります。</p>
       </div>
 
       <ol class="tl rv d1">
@@ -818,17 +721,10 @@ section + section .wrap::before{
           </div>
         </li>
         <li>
-          <div class="t">15:30</div>
-          <div>
-            <p class="ttl">集合</p>
-            <p class="sub">ホテルのロビーにお集まりください。<br>チャペルは裏手、歩いてすぐです。</p>
-          </div>
-        </li>
-        <li>
           <div class="t">15:50</div>
           <div>
-            <p class="ttl">チャペルへご案内</p>
-            <p class="sub">係の方のご案内で、チャペルへ移動して着席します。</p>
+            <p class="ttl">チャペル前に集合</p>
+            <p class="sub">チャペルの前に直接お集まりください。ホテルの裏手、歩いてすぐです。<br>染谷家のご両親は、リハーサルがあるため <span class="num">15:30</span> にお願いします。</p>
           </div>
         </li>
         <li class="key">
@@ -867,11 +763,6 @@ section + section .wrap::before{
           </div>
         </li>
       </ol>
-
-      <div class="callout rv d2">
-        <p class="lbl en">Please note</p>
-        <p>時間が前後する場合は、当日グループLINEでお知らせします。</p>
-      </div>
     </div>
   </section>
 
@@ -882,9 +773,9 @@ section + section .wrap::before{
         <div class="sec-num">弐</div>
         <div>
           <span class="sec-en">Chapel</span>
-          <h2>矢ケ崎チャペル</h2>
+          <h2>挙式会場</h2>
         </div>
-        <p class="lead">林のなかに建つ、独立したチャペルです。</p>
+        <p class="lead">矢ケ崎チャペル ── 林のなかに建つ、独立したチャペルです。</p>
       </div>
 
       <figure class="ph venue-photo rv d1" data-label="Chapel">
@@ -893,8 +784,9 @@ section + section .wrap::before{
       </figure>
 
       <div class="duo">
-        <div class="card plain rv d2">
+        <div class="card rv d2">
           <span class="en">Address</span>
+          <h3>矢ケ崎チャペル</h3>
           <dl>
             <dt>住所</dt><dd>〒389-0102<br>長野県北佐久郡軽井沢町軽井沢 1178</dd>
             <dt>ホテルから</dt><dd>裏手すぐ（徒歩1分）</dd>
@@ -924,7 +816,7 @@ section + section .wrap::before{
           <span class="sec-en">Stay</span>
           <h2>ご宿泊について</h2>
         </div>
-        <p class="lead">全員分の客室をこちらで確保しています（宿泊費は手配済みです）。<br>チェックインは到着後、式の前に済ませてください。<br>チャペルには控室がないため、お支度はお部屋でお願いします。</p>
+        <p class="lead">全員分の客室をこちらで確保しています。<br>チェックインは到着後、式の前に済ませてください。<br>チャペルには控室がないため、お支度はお部屋でお願いします。</p>
       </div>
 
       <div class="duo">
@@ -1078,21 +970,15 @@ section + section .wrap::before{
       当日どうぞよろしくお願いします。
     </p>
 
-    <div class="contact">
-      <p class="lbl en" style="margin:0">Contact</p>
-      <p class="num" style="margin:0"><span class="tbd"><a href="tel:09000000000">090-0000-0000</a></span></p>
-      <p style="margin:0; font-size:.76rem; letter-spacing:.2em; color:rgba(244,241,233,.6)">周作（新郎）まで</p>
-    </div>
-
     <p class="fin">〈仮〉表記は確定後に更新します</p>
   </div>
 </footer>
 
 <nav class="quickbar" aria-label="当日のショートカット">
   <ul>
-    <li><a href="#schedule"><b>15:30</b><span>集合</span></a></li>
-    <li><a href="#chapel"><b>MAP</b><span>会場</span></a></li>
-    <li><a href="tel:09000000000"><b>TEL</b><span>連絡</span></a></li>
+    <li><a href="#schedule"><b>Schedule</b><span>ながれ</span></a></li>
+    <li><a href="#chapel"><b>Map</b><span>会場</span></a></li>
+    <li><a href="#notes"><b>Notes</b><span>ご案内</span></a></li>
   </ul>
 </nav>
 
