@@ -252,8 +252,8 @@ img,svg{ max-width:100%; display:block; }
 main{ position:relative; }
 .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:var(--gut); }
 
-/* 緩急のために縦の余白を大きく取る。区切りは罫ではなく余白で作る */
-section{ padding-block:clamp(96px,17vh,196px); position:relative; }
+/* 区切りは罫ではなく余白で。詰めすぎない範囲で節度ある余白に */
+section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 
 /* 章見出し：番号の丸をやめ、小さな英字ラベル＋金の細罫＋明朝の見出し */
 .sec-head{
@@ -293,8 +293,8 @@ section{ padding-block:clamp(96px,17vh,196px); position:relative; }
 }
 
 /* ===== ごあいさつ ========================================= */
-/* 冒頭は写真の直後に来る「呼吸」。明朝でゆったり組み、余白を大きく取る */
-.greeting{ padding-top:clamp(104px,19vh,210px); padding-bottom:clamp(96px,17vh,190px); }
+/* 冒頭は写真の直後に来る「呼吸」。他の章より少しだけ余白を持たせる程度に */
+.greeting{ padding-top:clamp(64px,14vh,116px); padding-bottom:clamp(56px,12vh,92px); }
 .greeting .wrap{ max-width:640px; }
 .greeting .greeting-en{
   display:block; margin:0 0 clamp(30px,5vh,52px);
@@ -590,7 +590,7 @@ section{ padding-block:clamp(96px,17vh,196px); position:relative; }
 /* ===== 奥付 =============================================== */
 .colophon{
   background:var(--ink-deep); color:var(--paper);
-  padding:clamp(104px,18vh,180px) 0 clamp(52px,8vh,80px);
+  padding:clamp(72px,15vh,120px) 0 clamp(48px,8vh,72px);
   position:relative; overflow:hidden;
 }
 .colophon::before{
@@ -962,7 +962,6 @@ section{ padding-block:clamp(96px,17vh,196px); position:relative; }
               <li><em>母</em><b>本藤 文華</b></li>
               <li><em>弟</em><b>本藤 寛</b></li>
             </ul>
-            <p class="count">3 &nbsp;from&nbsp; Okayama</p>
           </div>
           <div class="side rv d3">
             <h3>新婦の家族</h3>
@@ -972,7 +971,6 @@ section{ padding-block:clamp(96px,17vh,196px); position:relative; }
               <li><em>姉</em><b>染谷 はるひ</b></li>
               <li><em>妹</em><b>染谷 美月</b></li>
             </ul>
-            <p class="count">4 &nbsp;from&nbsp; Tennodai</p>
           </div>
         </div>
       </div>
