@@ -395,6 +395,9 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   display:grid; gap:clamp(32px,5vw,56px);
   grid-template-columns:repeat(auto-fit,minmax(248px,1fr));
 }
+/* カードが1枚だけの段は、幅いっぱいに伸ばさず2段組のときと同じ幅で置く */
+.duo.solo{ grid-template-columns:minmax(0,420px); }
+
 /* カードは「箱」にしない。細い金の罫と余白だけで区切る（editorial 寄り） */
 .card{
   position:relative;
@@ -464,19 +467,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .card .ph.narrow{ max-width:420px; }
 .card{ position:relative; }
 
-/* ===== 地図 ============================================== */
-.map{
-  margin-top:1.7em;
-  position:relative; overflow:hidden;
-  aspect-ratio:16 / 10;
-  background:var(--paper-2);
-  border-radius:14px;
-  box-shadow:0 24px 50px -36px rgba(31,36,32,.45);
-}
-.map iframe{
-  position:absolute; inset:0; width:100%; height:100%; border:0;
-  filter:grayscale(.5) sepia(.08) contrast(.96);
-}
 .btn{
   margin-top:1.3em;
   display:inline-flex; align-items:center; gap:1.1em;
@@ -721,7 +711,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   body{ line-height:1.95; }
   .quickbar{ display:block; }
   .colophon{ padding-bottom:clamp(96px,16vh,130px); }
-  .map{ aspect-ratio:4 / 3; }
   .btn{ width:100%; justify-content:center; }
   /* 縦組みは幅を食うので、小さい画面では横組みに戻して積む */
   .venue-cap{ text-align:left; }
@@ -736,7 +725,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 /* ===== 印刷 ============================================== */
 @media print{
   body{ background:#fff; }
-  body::after,.dots,.quickbar,.map,.btn{ display:none !important; }
+  body::after,.dots,.quickbar,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
   .cover::before,.ridge,.cover-photo{ display:none; }
@@ -880,7 +869,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
         <img src="images/chapel-exterior.jpg" alt="林のなかに建つ矢ケ崎チャペルの外観">
       </figure>
 
-      <div class="duo">
+      <div class="duo solo">
         <div class="card rv d2">
           <span class="en">Address</span>
           <h3>矢ケ崎チャペル</h3>
@@ -888,15 +877,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
             <dt>住所</dt><dd>〒389-0102<br>長野県北佐久郡軽井沢町軽井沢 1178</dd>
             <dt>ホテルから</dt><dd>裏手すぐ（徒歩1分）</dd>
           </dl>
-        </div>
-        <div class="card plain rv d3">
-          <span class="en">Map</span>
-          <!-- クエリの「矢ヶ崎」は小書きの ヶ。この綴りで Google Maps が
-               矢ケ崎チャペルを正しく特定するので、表記とは別にこのまま置いています -->
-          <div class="map">
-            <iframe src="https://www.google.com/maps?q=%E7%9F%A2%E3%83%B6%E5%B4%8E%E3%83%81%E3%83%A3%E3%83%9A%E3%83%AB%20%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=17&amp;output=embed"
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="矢ケ崎チャペルの地図"></iframe>
-          </div>
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%9F%A2%E3%83%B6%E5%B4%8E%E3%83%81%E3%83%A3%E3%83%9A%E3%83%AB%20%E8%BB%BD%E4%BA%95%E6%B2%A2"
              target="_blank" rel="noopener">マップで開く</a>
         </div>
@@ -916,7 +896,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
         <p class="lead"><span class="num">15</span>時からチェックインが可能です。<br>ホテル到着後、チェックインを済ませ、お部屋でお支度をお願いします。</p>
       </div>
 
-      <div class="duo">
+      <div class="duo solo">
         <div class="card rv d1">
           <figure class="ph" data-label="Hotel">
             <div class="slot"><em>ホテルの写真</em><code>images/hotel.jpg</code></div>
@@ -930,13 +910,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
             <dt>電話</dt><dd class="num">0267-42-8444</dd>
             <dt>IN / OUT</dt><dd class="num">15:00 / 11:00</dd>
           </dl>
-        </div>
-        <div class="card plain rv d2">
-          <span class="en">Map</span>
-          <div class="map">
-            <iframe src="https://www.google.com/maps?q=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=16&amp;output=embed"
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="ホテルの地図"></iframe>
-          </div>
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%9B%E3%83%86%E3%83%AB%E3%83%9E%E3%83%AD%E3%82%A6%E3%83%89%E8%BB%BD%E4%BA%95%E6%B2%A2"
              target="_blank" rel="noopener">マップで開く</a>
         </div>
@@ -961,7 +934,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
         <img src="images/dinner.jpg" alt="トラットリア クレアッタ 軽井沢の外観" loading="lazy">
       </figure>
 
-      <div class="duo">
+      <div class="duo solo">
         <div class="card rv d2">
           <span class="en">Restaurant</span>
           <h3>TRATTORIA CREATTA</h3>
@@ -971,13 +944,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
             <dt>住所</dt><dd>長野県北佐久郡軽井沢町軽井沢 691-1<br><span style="color:var(--ink-soft)">グランディスタイル 旧軽井沢 ホテル&amp;リゾート</span></dd>
             <dt>電話</dt><dd class="num">050-5456-7908</dd>
           </dl>
-        </div>
-        <div class="card plain rv d3">
-          <span class="en">Map</span>
-          <div class="map">
-            <iframe src="https://www.google.com/maps?q=TRATTORIA%20CREATTA%20%E8%BB%BD%E4%BA%95%E6%B2%A2&amp;z=16&amp;output=embed"
-                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="トラットリア クレアッタの地図"></iframe>
-          </div>
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=TRATTORIA%20CREATTA%20%E8%BB%BD%E4%BA%95%E6%B2%A2"
              target="_blank" rel="noopener">マップで開く</a>
         </div>
