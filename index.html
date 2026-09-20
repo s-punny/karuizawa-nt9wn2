@@ -486,7 +486,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .quickbar{
   position:fixed; z-index:55;
   left:50%; bottom:calc(env(safe-area-inset-bottom) + 16px);
-  width:min(92%,440px);
+  width:min(94%,470px);
   display:none;
   background:rgba(252,251,248,.72);
   -webkit-backdrop-filter:blur(18px) saturate(1.4); backdrop-filter:blur(18px) saturate(1.4);
@@ -497,23 +497,23 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   transition:transform .6s cubic-bezier(.16,1,.3,1);
 }
 .quickbar.show{ transform:translateX(-50%); }
-.quickbar ul{ margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(4,1fr); }
+.quickbar ul{ margin:0; padding:0; list-style:none; display:grid; grid-template-columns:repeat(5,1fr); }
 .quickbar li + li{ border-left:1px solid var(--rule); }
 .quickbar a{
-  display:grid; gap:.4em; justify-items:center;
-  padding:.95em .25em 1em; text-decoration:none; color:var(--ink-soft);
+  display:grid; gap:.38em; justify-items:center;
+  padding:.9em .16em .95em; text-decoration:none; color:var(--ink-soft);
   transition:color .3s ease;
 }
-/* 4項目なので1列が狭い。字送りは詰めて、狭い画面ではさらに小さくする */
+/* 5項目あるので1列が狭い。字送りを詰め、狭い画面ではさらに一段小さくする */
 .quickbar b{
-  font-family:var(--en); font-weight:500; font-size:.76rem;
-  letter-spacing:.12em; text-transform:uppercase; color:var(--brass);
+  font-family:var(--en); font-weight:500; font-size:.66rem;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--brass);
   white-space:nowrap; transition:color .3s ease;
 }
-.quickbar span{ font-size:.58rem; letter-spacing:.12em; white-space:nowrap; }
-@media (max-width:360px){
-  .quickbar b{ font-size:.68rem; letter-spacing:.06em; }
-  .quickbar span{ font-size:.54rem; letter-spacing:.06em; }
+.quickbar span{ font-size:.56rem; letter-spacing:.08em; white-space:nowrap; }
+@media (max-width:380px){
+  .quickbar b{ font-size:.58rem; letter-spacing:.01em; }
+  .quickbar span{ font-size:.52rem; letter-spacing:.04em; }
 }
 .quickbar a.on{ color:var(--ink); }
 .quickbar a.on b{ color:var(--ink-deep); }
@@ -1137,8 +1137,9 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 <nav class="quickbar" aria-label="当日のショートカット">
   <ul>
     <li><a href="#schedule"><b>Schedule</b><span>ながれ</span></a></li>
-    <li><a href="#chapel"><b>Map</b><span>会場</span></a></li>
-    <li><a href="#notes"><b>Notes</b><span>ご案内</span></a></li>
+    <li><a href="#chapel"><b>Chapel</b><span>挙式</span></a></li>
+    <li><a href="#stay"><b>Hotel</b><span>宿泊</span></a></li>
+    <li><a href="#dinner"><b>Dinner</b><span>食事</span></a></li>
     <li><a href="#around"><b>Around</b><span>観光</span></a></li>
   </ul>
 </nav>
