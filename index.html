@@ -153,14 +153,14 @@ img,svg{ max-width:100%; display:block; }
   overflow:hidden;
 }
 
-/* 写真：紙に一枚置いた縦位置のパネル。
-   高さで大きさを決めているのは、表紙で効くのが縦の余白だから。 */
+/* 写真：紙に一枚置いた正方形のパネル。
+   正方形は縦横どちらもはみ出しうるので、画面の幅と高さの
+   小さいほうに合わせて一辺を決める。 */
 .cover-photo{
   order:2;
   position:relative; overflow:hidden;
-  height:clamp(230px,44svh,430px);
-  aspect-ratio:3 / 4;
-  max-width:72vw;
+  width:min(76vw, 44svh, 400px);
+  aspect-ratio:1 / 1;
   border-radius:3px;
   background:var(--paper-2);
   box-shadow:0 34px 60px -34px rgba(70,52,48,.42);
@@ -733,7 +733,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   <!-- 表紙はブーケの写真。無ければ枠ごと消えます。
        差し替えるときはファイル名の番号を上げること（同じ名前だと
        家族のブラウザが古い写真を表示し続けるため） -->
-  <div class="cover-photo"><img src="images/cover-bouquet-2.jpg" alt=""></div>
+  <div class="cover-photo"><img src="images/cover-bouquet-3.jpg" alt=""></div>
 
   <p class="cover-label cv cv1">Wedding Invitation</p>
 
