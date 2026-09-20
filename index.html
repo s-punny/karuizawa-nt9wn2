@@ -1135,7 +1135,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 <nav class="quickbar" aria-label="目次">
   <div class="qb-sheet" id="qbSheet">
     <ul>
-      <li><a href="#greeting">ごあいさつ</a></li>
       <li><a href="#schedule">当日のながれ</a></li>
       <li><a href="#chapel">挙式会場</a></li>
       <li><a href="#stay">ご宿泊</a></li>
@@ -1152,7 +1151,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 </nav>
 
 <nav class="dots" aria-label="目次">
-  <a href="#greeting"><span>ごあいさつ</span><i></i></a>
   <a href="#schedule"><span>当日のながれ</span><i></i></a>
   <a href="#chapel"><span>チャペル</span><i></i></a>
   <a href="#stay"><span>ご宿泊</span><i></i></a>
@@ -1226,8 +1224,10 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
     secs.forEach(function(s,i){ if (s && docTop(s) <= mid) active = i; });
     links.forEach(function(a,i){ a.classList.toggle('on', i === active); });
 
-    /* 目次の現在地：右端のドットと同じ見かたで1つだけ点灯 */
-    qlinks.forEach(function(a,i){ a.classList.toggle('on', i === active); });
+    /* 目次の現在地。並びがドットと違っても合うよう、目次自身の一覧から出す */
+    var qa = -1;
+    qsecs.forEach(function(s,i){ if (s && docTop(s) <= mid) qa = i; });
+    qlinks.forEach(function(a,i){ a.classList.toggle('on', i === qa); });
   }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive:true });
