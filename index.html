@@ -30,6 +30,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Shippori+Mincho+B1:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- 観光マップ用。1枚の地図に複数のピンを立てたいので Leaflet を使っています。
+     Google の埋め込み（output=embed）は1枚につき1か所しか指定できないため。
+     読み込めなかった場合はマップの代わりに「マップで開く」ボタンが出ます。 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 /* ============================================================
    軽井沢 / WEDDING INVITATION & GUIDE
@@ -449,7 +454,11 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   position:absolute; inset:0; z-index:2;
   width:100%; height:100%; object-fit:cover; object-position:center;
   filter:brightness(.99) contrast(1.03) saturate(1.02);
+  /* 読み込めるまでは隠す。置いていない写真の「壊れた画像」アイコンを
+     一瞬でも出さないため（読み込めたら JS が .has-photo を付ける） */
+  opacity:0; transition:opacity .6s ease;
 }
+.ph.has-photo img{ opacity:1; }
 .ph.has-photo{ box-shadow:0 24px 50px -34px rgba(31,36,32,.5); }
 .ph.has-photo::before,.ph.has-photo .slot{ display:none; }
 
@@ -587,6 +596,99 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .note strong{ font-weight:500; color:var(--ink); }
 .note .fine{ font-size:.76rem; color:rgba(47,58,50,.52); }
 
+/* ===== 観光 ============================================== */
+.spot-map{
+  position:relative; overflow:hidden;
+  aspect-ratio:4 / 3;
+  background:var(--paper-2);
+  border-radius:14px;
+  box-shadow:0 24px 50px -36px rgba(31,36,32,.45);
+}
+@media (min-width:721px){ .spot-map{ aspect-ratio:16 / 9; } }
+/* 高さは Leaflet を待たずに枠側で決める（読み込み前でも崩れないように） */
+#spotmap{ position:absolute; inset:0; }
+.spot-map .leaflet-container{
+  width:100%; height:100%;
+  background:var(--paper-2); font-family:var(--sans);
+}
+/* 地図の色味は他の埋め込み地図と揃えて沈める */
+.spot-map .leaflet-tile-pane{ filter:grayscale(.5) sepia(.08) contrast(.96); }
+.spot-map .leaflet-popup-content-wrapper{ border-radius:10px; }
+.spot-map .leaflet-popup-content{
+  margin:.85em 1.2em; font-family:var(--mincho);
+  font-size:.82rem; letter-spacing:.1em; color:var(--ink);
+}
+.spot-map .leaflet-control-attribution{
+  background:rgba(247,245,240,.8); font-size:.56rem; letter-spacing:.02em;
+}
+.spot-map .leaflet-bar a{ color:var(--ink); }
+
+/* 番号ピン（カード側の 01〜04 と対応） */
+.pin{ background:none; border:0; }
+.pin span{
+  display:grid; place-content:center;
+  width:28px; height:28px; border-radius:999px;
+  background:var(--ink-deep); color:var(--paper);
+  border:1.5px solid var(--brass-lt);
+  font-family:var(--en); font-weight:600; font-size:.76rem;
+  box-shadow:0 7px 16px -7px rgba(31,36,32,.8);
+}
+
+/* 地図が読み込めなかったときの控え */
+.map-fallback{
+  position:absolute; inset:0; z-index:1;
+  display:grid; place-content:center; gap:1.2em; justify-items:center;
+  text-align:center; padding:1.6em;
+}
+.map-fallback em{
+  font-style:normal; font-size:.76rem; letter-spacing:.18em; line-height:2;
+  color:rgba(47,58,50,.58);
+}
+.spot-map.ready .map-fallback{ display:none; }
+
+.map-note{
+  margin:1.1em 0 0; font-size:.74rem; letter-spacing:.12em; line-height:2;
+  color:rgba(47,58,50,.52);
+}
+
+.spots{
+  margin-top:clamp(42px,7vh,70px);
+  display:grid; gap:clamp(34px,5vw,54px);
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+}
+.spot{
+  display:flex; flex-direction:column;
+  border-top:1px solid var(--rule); padding-top:clamp(20px,3vh,28px);
+  position:relative;
+}
+.spot::before{
+  content:""; position:absolute; top:-1px; left:0;
+  width:38px; height:1px; background:var(--brass);
+}
+.spot .ph{ margin-bottom:1.7em; border-radius:12px; }
+.spot-no{
+  display:block; color:var(--brass);
+  font-family:var(--en); font-weight:600;
+  letter-spacing:.34em; font-size:.68rem;
+}
+.spot h3{
+  font-family:var(--mincho);
+  margin:.55em 0 .6em; font-size:1.1rem; font-weight:500; letter-spacing:.1em;
+}
+.spot .meta{
+  margin:0 0 1.1em; font-size:.72rem; letter-spacing:.18em; color:var(--brass);
+}
+.spot-body{ flex:1; }
+.spot-body p{ margin:0; font-size:.86rem; line-height:2.15; color:var(--ink-soft); }
+.spot .btn{
+  align-self:flex-start; margin-top:1.7em;
+  padding:.9em 1.55em; font-size:.66rem; letter-spacing:.24em;
+}
+.spots-fine{
+  margin:clamp(30px,4vh,44px) 0 0;
+  font-size:.76rem; letter-spacing:.1em; color:rgba(47,58,50,.52);
+}
+
 /* ===== 奥付 =============================================== */
 .colophon{
   background:var(--ink-deep); color:var(--paper);
@@ -680,7 +782,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 /* ===== 印刷 ============================================== */
 @media print{
   body{ background:#fff; }
-  body::after,.dots,.quickbar,.map,.btn{ display:none !important; }
+  body::after,.dots,.quickbar,.map,.spot-map,.map-note,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
   .cover::before,.ridge,.cover-photo{ display:none; }
@@ -996,20 +1098,88 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
           <h3>気候<small>Weather</small></h3>
           <p>10月中旬の軽井沢は、日中でも <span class="num">15</span>℃ 前後。朝晩は <span class="num">5</span>℃ を下回る日もあります。<br>あたたかい服装でお越しください。</p>
         </div>
-        <div class="note">
-          <h3>まわりを歩く<small>Around</small></h3>
-          <div>
-            <p>翌朝は自由行動です。ホテルから歩ける範囲だけでも、いくつか。</p>
-            <p>
-              <strong>雲場池</strong> — 徒歩10分ほど。水面に木立が映る池。10月中旬は紅葉の走りの時期です。<br>
-              <strong>旧軽井沢銀座</strong> — 徒歩15分ほど。パン屋やジャム屋が並ぶ通り。<br>
-              <strong>軽井沢プリンスショッピングプラザ</strong> — 駅の南口すぐ。<br>
-              <strong>ハルニレテラス</strong> — 車で15分ほど。川沿いの木立のなかのお店。
-            </p>
-            <p class="fine">所要時間はいずれも目安です。</p>
-          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 観光 ============ -->
+  <section id="around">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div class="sec-num">漆</div>
+        <div>
+          <span class="sec-en">Sightseeing</span>
+          <h2>観光</h2>
+        </div>
+        <p class="lead">翌朝は自由行動です。ホテルから歩いて行けるところを中心に、いくつかご紹介します。</p>
+      </div>
+
+      <!-- 4か所をまとめて1枚に。座標は下の JS（spots 配列）にあります -->
+      <div class="spot-map rv d1">
+        <div id="spotmap"></div>
+        <div class="map-fallback">
+          <em>地図を読み込めませんでした</em>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
         </div>
       </div>
+      <p class="map-note">ピンをタップすると場所の名前が出ます。道順は、各スポットの「マップで開く」からご覧ください。</p>
+
+      <div class="spots">
+        <article class="spot rv d2">
+          <figure class="ph" data-label="Spot 01">
+            <div class="slot"><em>雲場池の写真</em><code>images/spot-kumobaike.jpg</code></div>
+            <img src="images/spot-kumobaike.jpg" alt="雲場池" loading="lazy">
+          </figure>
+          <span class="spot-no">01</span>
+          <h3>雲場池</h3>
+          <p class="meta">ホテルから徒歩10分ほど</p>
+          <div class="spot-body">
+            <p>水面に木立が映る、軽井沢を代表する池。ぐるりと一周して20分ほどの遊歩道があります。10月中旬は紅葉の走りの時期です。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%9B%B2%E5%A0%B4%E6%B1%A0%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d3">
+          <figure class="ph" data-label="Spot 02">
+            <div class="slot"><em>旧軽井沢銀座の写真</em><code>images/spot-kyukaru.jpg</code></div>
+            <img src="images/spot-kyukaru.jpg" alt="旧軽井沢銀座の通り" loading="lazy">
+          </figure>
+          <span class="spot-no">02</span>
+          <h3>旧軽井沢銀座</h3>
+          <p class="meta">ホテルから徒歩15分ほど</p>
+          <div class="spot-body">
+            <p>パン屋やジャム屋、カフェが並ぶ通り。朝のうちは人も少なく、ゆっくり歩けます。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%97%A7%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%8A%80%E5%BA%A7%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d4">
+          <figure class="ph" data-label="Spot 03">
+            <div class="slot"><em>軽井沢・プリンスショッピングプラザの写真</em><code>images/spot-prince.jpg</code></div>
+            <img src="images/spot-prince.jpg" alt="軽井沢・プリンスショッピングプラザ" loading="lazy">
+          </figure>
+          <span class="spot-no">03</span>
+          <h3>軽井沢・プリンスショッピングプラザ</h3>
+          <p class="meta">軽井沢駅 南口すぐ</p>
+          <div class="spot-body">
+            <p>駅の目の前に広がるアウトレット。帰りの電車までの時間にも寄りやすい場所です。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2%E3%83%BB%E3%83%97%E3%83%AA%E3%83%B3%E3%82%B9%E3%82%B7%E3%83%A7%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0%E3%83%97%E3%83%A9%E3%82%B6" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d4">
+          <figure class="ph" data-label="Spot 04">
+            <div class="slot"><em>ハルニレテラスの写真</em><code>images/spot-harunire.jpg</code></div>
+            <img src="images/spot-harunire.jpg" alt="ハルニレテラスの木道" loading="lazy">
+          </figure>
+          <span class="spot-no">04</span>
+          <h3>ハルニレテラス</h3>
+          <p class="meta">車で15分ほど</p>
+          <div class="spot-body">
+            <p>川沿いの木立のなかに、カフェやベーカリーが点在する一角。少し足をのばすならこちらへ。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%8F%E3%83%AB%E3%83%8B%E3%83%AC%E3%83%86%E3%83%A9%E3%82%B9%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+      </div>
+
+      <p class="spots-fine">所要時間はいずれも目安です。</p>
     </div>
   </section>
 
@@ -1038,8 +1208,10 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   <a href="#dinner"><span>お食事</span><i></i></a>
   <a href="#guests"><span>参列者</span><i></i></a>
   <a href="#notes"><span>ご案内</span><i></i></a>
+  <a href="#around"><span>観光</span><i></i></a>
 </nav>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1111,6 +1283,58 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', onScroll);
+})();
+
+/* 観光マップ：ピックアップした4か所を1枚に立てる。
+   Leaflet が読み込めなかった場合は何もせず、.map-fallback（マップで開く）が残ります。
+   座標を直すときは下の spots だけ触れば OK。
+   取得元：Google マップで場所を右クリック →「緯度・経度をコピー」 */
+(function(){
+  var host = document.getElementById('spotmap');
+  if (!host || !window.L) return;
+
+  var spots = [
+    { n:'01', name:'雲場池',                        lat:36.352295, lng:138.626991 },
+    { n:'02', name:'旧軽井沢銀座',                  lat:36.357616, lng:138.634537 },
+    { n:'03', name:'軽井沢・プリンスショッピングプラザ', lat:36.340455, lng:138.631678 },
+    { n:'04', name:'ハルニレテラス',                lat:36.359335, lng:138.590267 }
+  ];
+
+  var map = L.map(host, {
+    /* 記事のなかの地図なので、スクロールを奪わないようにしている。
+       スマホはドラッグを切って（ピンチ拡大と ± ボタンは効く）、ページの縦スクロールを優先 */
+    scrollWheelZoom:false,
+    dragging: !L.Browser.mobile
+  });
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+  }).addTo(map);
+
+  var pts = [];
+  spots.forEach(function(s){
+    L.marker([s.lat, s.lng], {
+      title: s.name,
+      icon: L.divIcon({
+        className:'pin', html:'<span>' + s.n + '</span>',
+        iconSize:[28,28], iconAnchor:[14,14], popupAnchor:[0,-15]
+      })
+    }).addTo(map).bindPopup(s.name);
+    pts.push([s.lat, s.lng]);
+  });
+
+  function frame(){
+    map.invalidateSize();
+    /* 左上はズームボタン、右下は出典表示が乗るので、その分だけ内側に寄せる */
+    map.fitBounds(pts, { paddingTopLeft:[58,40], paddingBottomRight:[40,48] });
+  }
+  frame();
+  /* 章が画面に入るときに .rv のアニメーションが走るので、そのあとで測り直す */
+  window.addEventListener('load', frame);
+  window.addEventListener('resize', frame);
+
+  host.parentNode.classList.add('ready');
 })();
 </script>
 </body>
