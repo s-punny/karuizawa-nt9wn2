@@ -1235,6 +1235,11 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
     return h && h.charAt(0) === '#' ? document.querySelector(h) : null;
   });
 
+  /* セクションのページ先頭からの位置。
+     main に position:relative が効いていて offsetParent が <main> になるため、
+     offsetTop は表紙の高さぶんズレる。スクロール量と比べるのでページ基準で測り直す。 */
+  function docTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
+
   function onScroll(){
     var y = window.scrollY, vh = window.innerHeight, mid = y + vh*0.42;
 
@@ -1242,17 +1247,19 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
     qbar.classList.toggle('show', y > vh*0.75);
 
     /* 暗い面に重なったら反転 */
-    var onDark = (y < cover.offsetHeight - vh*0.5) || (y + vh*0.5 > colo.offsetTop);
+    var onDark = (y < cover.offsetHeight - vh*0.5) || (y + vh*0.5 > docTop(colo));
     dots.classList.toggle('inverted', onDark);
 
     var active = -1;
-    secs.forEach(function(s,i){ if (s && s.offsetTop <= mid) active = i; });
+    secs.forEach(function(s,i){ if (s && docTop(s) <= mid) active = i; });
     links.forEach(function(a,i){ a.classList.toggle('on', i === active); });
 
     /* 下メニューの現在地：該当セクション内に入っているものを1つだけ点灯 */
     var qa = -1;
     qsecs.forEach(function(s,i){
-      if (s && s.offsetTop <= mid && s.offsetTop + s.offsetHeight > mid) qa = i;
+      if (!s) return;
+      var top = docTop(s);
+      if (top <= mid && top + s.offsetHeight > mid) qa = i;
     });
     qlinks.forEach(function(a,i){ a.classList.toggle('on', i === qa); });
   }
