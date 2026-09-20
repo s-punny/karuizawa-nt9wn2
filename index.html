@@ -594,8 +594,17 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 
 /* ===== 観光 ============================================== */
 /* 地図は他の章と同じ .map をそのまま使う（枠・比率・色味を揃えるため）。
-   中身は Google マイマップなので、ピンの追加・修正はマイマップ側で行う。 */
-#around .map{ margin-top:0; }
+   中身は Google マイマップなので、ピンの追加・修正はマイマップ側で行う。
+
+   マイマップの埋め込みには上に見出し帯（地図名・アカウント・共有・全画面）が付く。
+   他の3枚の地図には無く浮くので、枠の外へ押し出して隠している。
+   上に黒い線が残る／地図が切れすぎる場合は --mymaps-head だけ調整すればよい。
+   下端の Google ロゴと出典表示には手を触れないこと（消すと利用規約に反する）。 */
+#around .map{ margin-top:0; --mymaps-head:76px; }
+#around .map iframe{
+  top:calc(-1 * var(--mymaps-head));
+  height:calc(100% + var(--mymaps-head));
+}
 
 .map-note{
   margin:1.1em 0 0; font-size:.74rem; letter-spacing:.12em; line-height:2;
