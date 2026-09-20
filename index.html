@@ -593,24 +593,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .note .fine{ font-size:.76rem; color:rgba(47,58,50,.52); }
 
 /* ===== 観光 ============================================== */
-/* 地図は他の章と同じ .map をそのまま使う（枠・比率・色味を揃えるため）。
-   中身は Google マイマップなので、ピンの追加・修正はマイマップ側で行う。
-
-   マイマップの埋め込みには上に見出し帯（地図名・アカウント・共有・全画面）が付く。
-   他の3枚の地図には無く浮くので、枠の外へ押し出して隠している。
-   上に黒い線が残る／地図が切れすぎる場合は --mymaps-head だけ調整すればよい。
-   下端の Google ロゴと出典表示には手を触れないこと（消すと利用規約に反する）。 */
-#around .map{ margin-top:0; --mymaps-head:76px; }
-#around .map iframe{
-  top:calc(-1 * var(--mymaps-head));
-  height:calc(100% + var(--mymaps-head));
-}
-
-.map-note{
-  margin:1.1em 0 0; font-size:.74rem; letter-spacing:.12em; line-height:2;
-  color:rgba(47,58,50,.52);
-}
-
 .spots{
   margin-top:clamp(42px,7vh,70px);
   display:grid; gap:clamp(34px,5vw,54px);
@@ -742,7 +724,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 /* ===== 印刷 ============================================== */
 @media print{
   body{ background:#fff; }
-  body::after,.dots,.quickbar,.map,.map-note,.btn{ display:none !important; }
+  body::after,.dots,.quickbar,.map,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
   .cover::before,.ridge,.cover-photo{ display:none; }
@@ -1071,48 +1053,35 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
           <span class="sec-en">Sightseeing</span>
           <h2>観光</h2>
         </div>
-        <p class="lead">翌朝は自由行動です。ホテルから歩いて行けるところを中心に、いくつかご紹介します。</p>
+        <p class="lead">翌朝は自由行動です。ホテルの周りと、少し足をのばしたところから、いくつかご紹介します。</p>
       </div>
-
-      <!-- スポットをまとめた Google マイマップ。マイマップの「自分のサイトに埋め込む」で
-           出てくる URL をそのまま使っている（ehbc は上の見出し帯の色指定）。
-           ピンの追加・修正・並べ替えはマイマップ側で行う（このファイルは mid を持つだけ）。
-           マイマップの共有が「リンクを知っている全員が閲覧可」でないと家族側で表示されません。 -->
-      <div class="map rv d1">
-        <iframe src="https://www.google.com/maps/d/embed?mid=13OdmLiObBC8OqpdvMfM2bh3NhB0uxCY&amp;ehbc=2E312F"
-                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                title="軽井沢の観光スポットの地図"></iframe>
-      </div>
-      <p class="map-note">ピンをタップすると場所の名前が出ます。道順は、各スポットの「マップで開く」からご覧ください。</p>
-      <a class="btn rv d1" href="https://www.google.com/maps/d/viewer?mid=13OdmLiObBC8OqpdvMfM2bh3NhB0uxCY"
-         target="_blank" rel="noopener">地図をまとめて開く</a>
 
       <div class="spots">
         <article class="spot rv d2">
           <figure class="ph" data-label="Spot 01">
-            <div class="slot"><em>雲場池の写真</em><code>images/spot-kumobaike.jpg</code></div>
-            <img src="images/spot-kumobaike.jpg" alt="雲場池" loading="lazy">
-          </figure>
-          <span class="spot-no">01</span>
-          <h3>雲場池</h3>
-          <p class="meta">ホテルから徒歩10分ほど</p>
-          <div class="spot-body">
-            <p>水面に木立が映る、軽井沢を代表する池。ぐるりと一周して20分ほどの遊歩道があります。10月中旬は紅葉の走りの時期です。</p>
-          </div>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%9B%B2%E5%A0%B4%E6%B1%A0%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
-        </article>
-        <article class="spot rv d3">
-          <figure class="ph" data-label="Spot 02">
             <div class="slot"><em>旧軽井沢銀座の写真</em><code>images/spot-kyukaru.jpg</code></div>
             <img src="images/spot-kyukaru.jpg" alt="旧軽井沢銀座の通り" loading="lazy">
           </figure>
-          <span class="spot-no">02</span>
+          <span class="spot-no">01</span>
           <h3>旧軽井沢銀座</h3>
           <p class="meta">ホテルから徒歩15分ほど</p>
           <div class="spot-body">
             <p>パン屋やジャム屋、カフェが並ぶ通り。朝のうちは人も少なく、ゆっくり歩けます。</p>
           </div>
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%97%A7%E8%BB%BD%E4%BA%95%E6%B2%A2%E9%8A%80%E5%BA%A7%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d3">
+          <figure class="ph" data-label="Spot 02">
+            <div class="slot"><em>軽井沢T-SITEの写真</em><code>images/spot-tsite.jpg</code></div>
+            <img src="images/spot-tsite.jpg" alt="軽井沢T-SITE" loading="lazy">
+          </figure>
+          <span class="spot-no">02</span>
+          <h3>軽井沢T-SITE</h3>
+          <p class="meta">軽井沢駅 北口すぐ</p>
+          <div class="spot-body">
+            <p>蔦屋書店を中心にした複合施設。本を眺めながらコーヒーを飲める、雨の日にも向いた場所です。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2T-SITE" target="_blank" rel="noopener">マップで開く</a>
         </article>
         <article class="spot rv d4">
           <figure class="ph" data-label="Spot 03">
@@ -1139,6 +1108,32 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
             <p>川沿いの木立のなかに、カフェやベーカリーが点在する一角。少し足をのばすならこちらへ。</p>
           </div>
           <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%8F%E3%83%AB%E3%83%8B%E3%83%AC%E3%83%86%E3%83%A9%E3%82%B9%20%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d4">
+          <figure class="ph" data-label="Spot 05">
+            <div class="slot"><em>軽井沢ニューアートミュージアムの写真</em><code>images/spot-newart.jpg</code></div>
+            <img src="images/spot-newart.jpg" alt="軽井沢ニューアートミュージアム" loading="lazy">
+          </figure>
+          <span class="spot-no">05</span>
+          <h3>軽井沢ニューアートミュージアム</h3>
+          <p class="meta">軽井沢駅から徒歩8分ほど</p>
+          <div class="spot-body">
+            <p>現代美術を紹介する美術館。駅から旧軽井沢銀座へ向かう通り沿いにあります。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%A2%E3%83%BC%E3%83%88%E3%83%9F%E3%83%A5%E3%83%BC%E3%82%B8%E3%82%A2%E3%83%A0" target="_blank" rel="noopener">マップで開く</a>
+        </article>
+        <article class="spot rv d4">
+          <figure class="ph" data-label="Spot 06">
+            <div class="slot"><em>軽井沢千住博美術館の写真</em><code>images/spot-senju.jpg</code></div>
+            <img src="images/spot-senju.jpg" alt="軽井沢千住博美術館" loading="lazy">
+          </figure>
+          <span class="spot-no">06</span>
+          <h3>軽井沢千住博美術館</h3>
+          <p class="meta">軽井沢駅から車で10分ほど</p>
+          <div class="spot-body">
+            <p>日本画家・千住博の作品を集めた美術館。ゆるやかに傾斜した床と、庭に面した明るい展示室が特徴です。</p>
+          </div>
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2%E5%8D%83%E4%BD%8F%E5%8D%9A%E7%BE%8E%E8%A1%93%E9%A4%A8" target="_blank" rel="noopener">マップで開く</a>
         </article>
       </div>
 
