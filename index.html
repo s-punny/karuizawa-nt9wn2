@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>結婚式のご案内 ｜ 軽井沢</title>
 <meta name="description" content="軽井沢での結婚式のご案内としおり。当日のながれ・会場・ご宿泊のご案内。">
-<meta name="theme-color" content="#16211c">
+<meta name="theme-color" content="#faf7f4">
 
 <!-- 検索エンジンには載せない（家族に URL を直接渡す前提）。
      LINE のプレビューはこの指定があっても機能します。 -->
@@ -26,7 +26,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2316211c'/%3E%3Cg fill='none' stroke='%23c9ae7c' stroke-width='1.4'%3E%3Ccircle cx='13' cy='16' r='6'/%3E%3Ccircle cx='19' cy='16' r='6'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%232b2422'/%3E%3Cg fill='none' stroke='%23c6a49c' stroke-width='1.4'%3E%3Ccircle cx='13' cy='16' r='6'/%3E%3Ccircle cx='19' cy='16' r='6'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Shippori+Mincho+B1:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,21 +34,22 @@
 <style>
 /* ============================================================
    軽井沢 / WEDDING INVITATION & GUIDE
-   Palette : 緑は写真に任せ、地は温かい生成り＋やわらかい墨で。
+   Palette : 表紙のブーケから取った、生成りの地＋温かい墨＋くすんだ薔薇茶。
    Type    : 見出し=明朝  本文=Noto Sans JP  数字=Cormorant
    ============================================================ */
 
 :root{
-  --ink:      #2f3a32;   /* 本文（やわらかい墨・低彩度） */
-  --ink-soft: #565f57;   /* 副次テキスト */
-  --ink-deep: #1e231f;   /* 濃色セクションの地（ほぼ中立の黒） */
-  --paper:    #f7f5f0;   /* ページの地 */
-  --paper-2:  #efece4;   /* プレースホルダ等 */
+  --ink:      #3b3330;   /* 本文（温かい墨・茶寄り） */
+  --ink-soft: #6b5f5a;   /* 副次テキスト */
+  --ink-deep: #2b2422;   /* 濃色セクションの地 */
+  --paper:    #faf7f4;   /* ページの地（ごくわずかに桃を含む生成り） */
+  --paper-2:  #f1e9e4;   /* プレースホルダ等 */
   --card:     #ffffff;
-  --brass:    #8a7552;
-  --brass-lt: #b89c70;
-  --rule:     rgba(47,58,50,.13);
-  --rule-lt:  rgba(247,245,240,.20);
+  /* 差し色は金ではなく、表紙の花から取ったくすんだ薔薇茶 */
+  --accent:   #96706a;
+  --accent-lt:#c6a49c;
+  --rule:     rgba(59,51,48,.13);
+  --rule-lt:  rgba(250,247,244,.20);
 
   --mincho: "Shippori Mincho B1", "Yu Mincho", YuMincho, "Hiragino Mincho ProN", "MS PMincho", serif;
   --sans: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
@@ -122,7 +123,7 @@ img,svg{ max-width:100%; display:block; }
   vertical-align:.62em;
   margin-left:.45em;
   letter-spacing:0;
-  color:var(--brass);
+  color:var(--accent);
   opacity:.9;
 }
 .on-ink .tbd{
@@ -132,122 +133,95 @@ img,svg{ max-width:100%; display:block; }
     rgba(201,174,124,.26) 93%,
     transparent 93%);
 }
-.on-ink .tbd::after{ color:var(--brass-lt); }
+.on-ink .tbd::after{ color:var(--accent-lt); }
 
 /* ===== 表紙 =============================================== */
-/* 中央に積み上げるのをやめ、左下に一本の軸で組む。
-   写真は「敷き物」ではなく画面そのもの、文字はその上に置いた小さな版面 */
+/* 淡い写真なので、全面に敷いて白抜き文字を乗せる作りはやめた。
+   紙の上に写真を一枚置いた「冊子の表紙」として、中央軸で組む。 */
 .cover{
   position:relative;
   min-height:100svh;
-  background:var(--ink-deep);
-  color:var(--paper);
+  background:var(--paper);
+  color:var(--ink);
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
-  align-items:flex-start;
-  padding:clamp(30px,6vh,66px) var(--gut) clamp(38px,8vh,88px);
+  align-items:center;
+  justify-content:center;
+  gap:clamp(22px,4.2vh,40px);
+  text-align:center;
+  padding:clamp(38px,7vh,76px) var(--gut);
   overflow:hidden;
-  isolation:isolate;
 }
-/* 霧（中立の暗がり。緑みは載せない） */
-.cover::before{
-  content:"";
-  position:absolute; inset:-20%;
-  z-index:-2;
-  background:
-    radial-gradient(60% 44% at 50% 26%, rgba(40,42,40,.34), transparent 72%),
-    radial-gradient(70% 42% at 16% 84%, rgba(24,26,24,.5), transparent 74%);
-  animation:drift 30s ease-in-out infinite alternate;
-}
-@keyframes drift{
-  from{ transform:translate3d(-1.5%,0,0) scale(1); }
-  to  { transform:translate3d(2%,-2%,0) scale(1.06); }
-}
-/* 表紙の写真。明るく起こして建物を見せる。ごく軽い調整だけ */
-.cover-photo{ position:absolute; inset:0; z-index:-3; overflow:hidden; }
-.cover-photo img{
-  width:100%; height:100%; object-fit:cover; object-position:50% 36%;
-  opacity:.82;
-  filter:grayscale(.28) contrast(1.03) brightness(.96) saturate(.92);
-  animation:kenburns 38s ease-in-out infinite alternate;
-}
-/* かぶせは中立の黒。上は軽く、下を深くして文字を読ませる（緑みなし） */
-.cover-photo::after{
-  content:""; position:absolute; inset:0;
-  background:
-    linear-gradient(180deg, rgba(20,22,20,.42) 0%, rgba(20,22,20,.12) 22%, rgba(20,22,20,.30) 52%, rgba(18,20,18,.86) 100%),
-    linear-gradient(74deg, rgba(20,22,20,.60) 0%, rgba(20,22,20,.18) 44%, transparent 70%);
-}
-@keyframes kenburns{ from{ transform:scale(1.04) } to{ transform:scale(1.12) } }
-/* 写真があるときは霧を薄く（重ねると濁る） */
-.cover.has-photo::before{ opacity:.34; }
 
-/* 稜線（浅間山） */
-.ridge{
-  position:absolute; left:0; right:0; bottom:0; z-index:-1;
-  width:100%; height:auto;
+/* 写真：紙に一枚置いた縦位置のパネル。
+   高さで大きさを決めているのは、表紙で効くのが縦の余白だから。 */
+.cover-photo{
+  order:2;
+  position:relative; overflow:hidden;
+  height:clamp(230px,44svh,430px);
+  aspect-ratio:3 / 4;
+  max-width:72vw;
+  border-radius:3px;
+  background:var(--paper-2);
+  box-shadow:0 34px 60px -34px rgba(70,52,48,.42);
 }
-.ridge .r1{ fill:rgba(255,255,255,.028); }
-.ridge .r2{ fill:rgba(255,255,255,.045); }
-.ridge .r3{ fill:none; stroke:rgba(201,174,124,.34); stroke-width:.6; }
-/* 写真を敷いたときは稜線を引っこめる（重なると絵が濁る） */
-.cover.has-photo .ridge{ display:none; }
+.cover-photo img{
+  width:100%; height:100%; object-fit:cover; object-position:50% 46%;
+}
+/* 写真が無いときは枠だけ消す。場所は取ったままにして、読み込みでの揺れを防ぐ */
+.cover:not(.has-photo) .cover-photo{ background:none; box-shadow:none; }
 
 /* 天：小さな標題だけ */
 .cover-label{
-  position:relative; z-index:2; margin:0;
+  order:1; margin:0;
   font-family:var(--en); font-weight:500;
-  font-size:.6rem; letter-spacing:.52em; text-transform:uppercase;
-  color:var(--brass-lt);
+  font-size:.6rem; letter-spacing:.5em; text-transform:uppercase;
+  text-indent:.5em;                 /* 中央揃えのとき、字間の分だけ右に寄るのを戻す */
+  color:var(--accent);
 }
 
 /* 地：日付 → 罫 → 名前 → 和名 → 会場、の一本の軸 */
-.cover-inner{
-  position:relative; z-index:2;
-  max-width:min(100%,760px);
-}
+.cover-inner{ order:3; max-width:min(100%,640px); }
 .cover-date{
   margin:0;
   font-family:var(--en);
-  font-size:clamp(.9rem,2.6vw,1.04rem);
-  letter-spacing:.44em;
-  color:rgba(244,241,233,.74);
+  font-size:clamp(.86rem,2.4vw,1rem);
+  letter-spacing:.42em; text-indent:.42em;
+  color:var(--ink-soft);
 }
 .cover-date::after{
   content:""; display:block;
-  width:34px; height:1px; background:var(--brass-lt);
-  margin-top:clamp(15px,2.6vh,22px);
+  width:34px; height:1px; background:var(--accent-lt);
+  margin:clamp(14px,2.4vh,20px) auto 0;
 }
 .names{
   font-family:var(--en);
   font-weight:300;
-  font-size:clamp(2.85rem,10.5vw,5.6rem);
-  line-height:1.0;
-  letter-spacing:.005em;
-  margin:clamp(16px,2.6vh,24px) 0 0;
+  font-size:clamp(2.1rem,7.6vw,3.4rem);
+  line-height:1.12;
+  letter-spacing:.02em;
+  margin:clamp(14px,2.2vh,22px) 0 0;
 }
 .names .ln{ display:block; }
 .names .ln i{
   font-style:italic;
-  font-size:.4em;
-  letter-spacing:.03em;
-  color:var(--brass-lt);
-  margin-right:.32em;
-  vertical-align:.1em;
+  font-size:.42em;
+  letter-spacing:.04em;
+  color:var(--accent);
+  margin-right:.34em;
+  vertical-align:.12em;
 }
 .names-jp{
-  margin:clamp(20px,3vh,32px) 0 0;
-  font-size:.84rem; font-weight:500;
-  letter-spacing:.34em;
-  color:rgba(244,241,233,.82);
+  margin:clamp(16px,2.4vh,26px) 0 0;
+  font-size:.82rem; font-weight:500;
+  letter-spacing:.3em; text-indent:.3em;
+  color:var(--ink);
 }
 .cover-place{
-  margin:clamp(9px,1.5vh,15px) 0 0;
-  font-size:.7rem; letter-spacing:.28em;
-  color:rgba(244,241,233,.5);
+  margin:clamp(8px,1.3vh,14px) 0 0;
+  font-size:.68rem; letter-spacing:.26em; text-indent:.26em;
+  color:var(--ink-soft);
 }
-
 
 /* ===== レイアウト ========================================= */
 main{ position:relative; }
@@ -263,7 +237,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .sec-num{ display:none; }
 .sec-en{
   display:block; margin:0 0 1.4em;
-  color:var(--brass);
+  color:var(--accent);
   font-family:var(--en); font-weight:500;
   letter-spacing:.4em; text-transform:uppercase;
   font-size:.68rem; line-height:1;
@@ -271,7 +245,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .sec-en::before{
   content:""; display:inline-block; vertical-align:.28em;
   width:26px; height:1px; margin-right:1.1em;
-  background:var(--brass); opacity:.7;
+  background:var(--accent); opacity:.7;
 }
 .sec-head h2{
   margin:0;
@@ -282,7 +256,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .sec-head h2::after{
   content:""; display:block;
-  width:44px; height:1px; background:var(--brass);
+  width:44px; height:1px; background:var(--accent);
   margin-top:clamp(18px,2.6vh,26px);
 }
 .sec-head .lead{
@@ -301,18 +275,18 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   display:block; margin:0 0 clamp(30px,5vh,52px);
   font-family:var(--en); font-weight:500;
   font-size:.7rem; letter-spacing:.42em; text-transform:uppercase;
-  color:var(--brass); text-align:center;
+  color:var(--accent); text-align:center;
 }
 .greeting p{
   font-family:var(--mincho);
   margin:0 0 1.9em;
   font-size:clamp(.96rem,2.6vw,1.06rem);
   line-height:2.55;
-  color:#3b453d;
+  color:#463c38;
 }
 .greeting .drop::first-letter{
   font-size:2.6em; float:left; line-height:.9;
-  margin:.14em .2em 0 -.04em; color:var(--brass);
+  margin:.14em .2em 0 -.04em; color:var(--accent);
   font-family:var(--mincho); font-weight:500;
 }
 .sign{
@@ -342,7 +316,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   position:relative;
   font-family:var(--en);
   font-size:1.06rem; letter-spacing:.1em;
-  color:rgba(47,58,50,.72);
+  color:rgba(59,51,48,.72);
   padding-top:.16em;
   padding-right:18px;   /* 数字と丸をくっつけない */
   text-align:right;
@@ -358,7 +332,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   right:-5.5px;
   width:8px; height:8px; border-radius:50%;
   background:var(--paper);
-  border:1px solid var(--brass);
+  border:1px solid var(--accent);
 }
 .tl .ttl{ font-family:var(--mincho); font-size:1.05rem; font-weight:500; letter-spacing:.1em; margin:0; }
 .tl .sub{
@@ -366,14 +340,14 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   color:var(--ink-soft); letter-spacing:.04em;
 }
 /* 挙式の行 */
-.tl li.key .t::after{ background:var(--brass); box-shadow:0 0 0 4px rgba(169,139,82,.16); }
+.tl li.key .t::after{ background:var(--accent); box-shadow:0 0 0 4px rgba(169,139,82,.16); }
 .tl li.key .t{ color:var(--ink); font-size:1.3rem; }
 .tl li.key .ttl{
   font-size:1.3rem; font-weight:600; letter-spacing:.22em;
 }
 .tl li.key .ttl small{
   display:block; font-family:var(--en); font-size:.5em;
-  letter-spacing:.4em; color:var(--brass); margin-top:.7em; font-weight:400;
+  letter-spacing:.4em; color:var(--accent); margin-top:.7em; font-weight:400;
 }
 
 /* ===== 会場の一枚 ======================================== */
@@ -382,7 +356,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   --ar:1000 / 650;
   border:none; border-radius:16px;
   margin-bottom:clamp(30px,5vh,50px);
-  box-shadow:0 30px 60px -40px rgba(31,36,32,.55);
+  box-shadow:0 30px 60px -40px rgba(62,50,46,.55);
 }
 .venue-cap{
   margin:1em 0 clamp(26px,5vh,44px);
@@ -406,21 +380,21 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .card::before{
   content:""; position:absolute; top:-1px; left:0;
-  width:38px; height:1px; background:var(--brass);
+  width:38px; height:1px; background:var(--accent);
 }
 .card h3{
   font-family:var(--mincho);
   margin:.4em 0 1em; font-size:1.12rem; font-weight:500; letter-spacing:.1em;
 }
 .card .en{
-  color:var(--brass);
+  color:var(--accent);
   font-family:var(--en); font-weight:500;
   letter-spacing:.36em; text-transform:uppercase; font-size:.62rem;
 }
 .card p{ margin:0 0 .9em; font-size:.86rem; line-height:2.15; color:var(--ink-soft); }
 .card.plain .en{ display:block; margin-bottom:1.4em; }
 .card dl{ margin:1.3em 0 0; display:grid; grid-template-columns:6.4em 1fr; gap:.9em 1em; font-size:.84rem; }
-.card dt{ color:var(--brass); letter-spacing:.14em; font-size:.76rem; }
+.card dt{ color:var(--accent); letter-spacing:.14em; font-size:.76rem; }
 .card dd{ margin:0; letter-spacing:.04em; color:var(--ink); }
 
 /* ===== 写真スロット ====================================== */
@@ -433,8 +407,8 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .ph::before{
   content:""; position:absolute; inset:0;
   background:
-    repeating-linear-gradient(135deg, rgba(47,58,50,.05) 0 1px, transparent 1px 10px),
-    linear-gradient(165deg, rgba(47,58,50,.06), transparent 64%);
+    repeating-linear-gradient(135deg, rgba(59,51,48,.05) 0 1px, transparent 1px 10px),
+    linear-gradient(165deg, rgba(59,51,48,.06), transparent 64%);
 }
 .ph .slot{
   position:absolute; inset:0; z-index:1;
@@ -443,11 +417,11 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .ph .slot em{
   font-style:normal; font-size:.74rem; letter-spacing:.22em;
-  color:rgba(47,58,50,.52);
+  color:rgba(59,51,48,.52);
 }
 .ph .slot code{
   font-family:var(--en); font-size:.66rem; letter-spacing:.14em;
-  color:var(--brass);
+  color:var(--accent);
 }
 .ph img{
   position:absolute; inset:0; z-index:2;
@@ -458,7 +432,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   opacity:0; transition:opacity .6s ease;
 }
 .ph.has-photo img{ opacity:1; }
-.ph.has-photo{ box-shadow:0 24px 50px -34px rgba(31,36,32,.5); }
+.ph.has-photo{ box-shadow:0 24px 50px -34px rgba(62,50,46,.5); }
 .ph.has-photo::before,.ph.has-photo .slot{ display:none; }
 
 /* カード上の写真 */
@@ -471,7 +445,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   margin-top:1.3em;
   display:inline-flex; align-items:center; gap:1.1em;
   padding:1.05em 1.8em;
-  border:1px solid var(--brass);
+  border:1px solid var(--accent);
   color:var(--ink); text-decoration:none;
   font-family:var(--en); font-weight:500;
   font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
@@ -492,7 +466,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   -webkit-backdrop-filter:blur(18px) saturate(1.4); backdrop-filter:blur(18px) saturate(1.4);
   border:1px solid rgba(255,255,255,.6);
   border-radius:20px;
-  box-shadow:0 16px 40px -12px rgba(31,36,32,.28), 0 2px 8px rgba(31,36,32,.08);
+  box-shadow:0 16px 40px -12px rgba(62,50,46,.28), 0 2px 8px rgba(62,50,46,.08);
   transform:translateX(-50%) translateY(calc(100% + 32px));
   transition:transform .6s cubic-bezier(.16,1,.3,1);
 }
@@ -507,7 +481,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 /* 5項目あるので1列が狭い。字送りを詰め、狭い画面ではさらに一段小さくする */
 .quickbar b{
   font-family:var(--en); font-weight:500; font-size:.66rem;
-  letter-spacing:.05em; text-transform:uppercase; color:var(--brass);
+  letter-spacing:.05em; text-transform:uppercase; color:var(--accent);
   white-space:nowrap; transition:color .3s ease;
 }
 .quickbar span{ font-size:.56rem; letter-spacing:.08em; white-space:nowrap; }
@@ -526,10 +500,10 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   border-radius:16px;
   padding:clamp(32px,6vw,52px) clamp(18px,4vw,30px);
   background:rgba(255,255,255,.5);
-  box-shadow:0 24px 50px -40px rgba(31,36,32,.4);
+  box-shadow:0 24px 50px -40px rgba(62,50,46,.4);
 }
 .roster-center .en{
-  color:var(--brass); font-family:var(--en); font-weight:500;
+  color:var(--accent); font-family:var(--en); font-weight:500;
   letter-spacing:.4em; text-transform:uppercase; font-size:.64rem;
 }
 .fam{
@@ -539,12 +513,12 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .fam span{ font-family:var(--mincho); font-size:1.08rem; letter-spacing:.14em; font-weight:500; }
 .fam span small{
   display:block; font-size:.62rem; letter-spacing:.24em;
-  color:rgba(47,58,50,.5); margin-top:.5em; font-weight:400;
+  color:rgba(59,51,48,.5); margin-top:.5em; font-weight:400;
 }
 .sides{ display:grid; gap:clamp(24px,4vw,40px); grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
 .side h3{
   margin:0 0 1.2em; font-size:.86rem; font-weight:600; letter-spacing:.3em;
-  color:var(--brass);
+  color:var(--accent);
   display:flex; align-items:center; gap:1em;
 }
 .side h3::after{ content:""; flex:1; height:1px; background:var(--rule); }
@@ -553,18 +527,18 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .side li b{ font-family:var(--mincho); font-weight:500; }
 .side li em{
   font-style:normal; font-size:.68rem; letter-spacing:.22em;
-  color:rgba(47,58,50,.48); min-width:4.2em;
+  color:rgba(59,51,48,.48); min-width:4.2em;
 }
 /* 人数が左右で違っても、下端の人数表記は揃える */
 .side{ display:flex; flex-direction:column; }
 .count{
   margin-top:auto; padding-top:1.4em; text-align:center;
   font-family:var(--en); letter-spacing:.3em; font-size:.76rem;
-  color:rgba(47,58,50,.5);
+  color:rgba(59,51,48,.5);
 }
 .roster-note{
   margin:.6em 0 0; text-align:center;
-  font-size:.74rem; letter-spacing:.14em; color:rgba(47,58,50,.5);
+  font-size:.74rem; letter-spacing:.14em; color:rgba(59,51,48,.5);
 }
 
 /* ===== ご案内 ============================================ */
@@ -580,12 +554,12 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .note h3 small{
   display:block; font-family:var(--en); font-size:.56rem; letter-spacing:.3em;
-  text-transform:uppercase; color:var(--brass); margin-top:.7em; font-weight:400;
+  text-transform:uppercase; color:var(--accent); margin-top:.7em; font-weight:400;
 }
-.note p{ margin:0; font-size:.84rem; line-height:2.15; color:rgba(47,58,50,.78); }
+.note p{ margin:0; font-size:.84rem; line-height:2.15; color:rgba(59,51,48,.78); }
 .note p + p{ margin-top:1.1em; }
 .note strong{ font-weight:500; color:var(--ink); }
-.note .fine{ font-size:.76rem; color:rgba(47,58,50,.52); }
+.note .fine{ font-size:.76rem; color:rgba(59,51,48,.52); }
 
 /* ===== 観光 ============================================== */
 .spots{
@@ -600,11 +574,11 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .spot::before{
   content:""; position:absolute; top:-1px; left:0;
-  width:38px; height:1px; background:var(--brass);
+  width:38px; height:1px; background:var(--accent);
 }
 .spot .ph{ margin-bottom:1.7em; border-radius:12px; }
 .spot-no{
-  display:block; color:var(--brass);
+  display:block; color:var(--accent);
   font-family:var(--en); font-weight:600;
   letter-spacing:.34em; font-size:.68rem;
 }
@@ -613,7 +587,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   margin:.55em 0 .6em; font-size:1.1rem; font-weight:500; letter-spacing:.1em;
 }
 .spot .meta{
-  margin:0 0 1.1em; font-size:.72rem; letter-spacing:.18em; color:var(--brass);
+  margin:0 0 1.1em; font-size:.72rem; letter-spacing:.18em; color:var(--accent);
 }
 .spot-body{ flex:1; }
 .spot-body p{ margin:0; font-size:.86rem; line-height:2.15; color:var(--ink-soft); }
@@ -626,11 +600,11 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .spot .hours em{
   display:block; font-style:normal; margin-bottom:.45em;
-  font-size:.64rem; letter-spacing:.22em; color:var(--brass);
+  font-size:.64rem; letter-spacing:.22em; color:var(--accent);
 }
 .spots-fine{
   margin:clamp(30px,4vh,44px) 0 0;
-  font-size:.76rem; letter-spacing:.1em; color:rgba(47,58,50,.52);
+  font-size:.76rem; letter-spacing:.1em; color:rgba(59,51,48,.52);
 }
 
 /* ===== 奥付 =============================================== */
@@ -645,7 +619,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .colophon .wrap{ position:relative; text-align:center; }
 .colophon .en{
-  color:var(--brass-lt); font-family:var(--en); font-weight:500;
+  color:var(--accent-lt); font-family:var(--en); font-weight:500;
   letter-spacing:.42em; text-transform:uppercase; font-size:.68rem;
 }
 .colophon .msg{
@@ -670,7 +644,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .dots.show{ opacity:1; }
 .dots a{
   display:flex; align-items:center; justify-content:flex-end; gap:10px;
-  text-decoration:none; color:rgba(47,58,50,.5);
+  text-decoration:none; color:rgba(59,51,48,.5);
 }
 .dots a span{
   font-size:.6rem; letter-spacing:.22em;
@@ -680,14 +654,14 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 }
 .dots a i{
   width:5px; height:5px; border-radius:50%;
-  background:transparent; border:1px solid rgba(47,58,50,.34);
+  background:transparent; border:1px solid rgba(59,51,48,.34);
   transition:background .35s ease, transform .35s ease, border-color .35s ease;
 }
 .dots a:hover span{ opacity:.75; transform:none; }
-.dots a.on i{ background:var(--brass); border-color:var(--brass); transform:scale(1.4); }
+.dots a.on i{ background:var(--accent); border-color:var(--accent); transform:scale(1.4); }
 .dots.inverted a{ color:rgba(244,241,233,.6); }
 .dots.inverted a i{ border-color:rgba(244,241,233,.4); }
-.dots.inverted a.on i{ background:var(--brass-lt); border-color:var(--brass-lt); }
+.dots.inverted a.on i{ background:var(--accent-lt); border-color:var(--accent-lt); }
 
 /* ===== 出現アニメーション ================================ */
 .rv{ opacity:0; transform:translateY(20px); }
@@ -728,13 +702,12 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   body::after,.dots,.quickbar,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
-  .cover::before,.ridge,.cover-photo{ display:none; }
-  .cover-label,.cover-date{ color:#8a6f3d; }
+  .cover-photo{ box-shadow:none; }
+  .cover-label,.cover-date{ color:#8a5f58; }
   .names,.names-jp{ color:#000; }
   .cover-place{ color:#333; }
   .colophon{ background:#fff; color:#000; }
   .colophon::before{ display:none; }
-  .colophon .msg{ color:#000; }
   section{ page-break-inside:avoid; padding-block:28px; }
   .rv,.cv{ opacity:1 !important; transform:none !important; }
 }
@@ -744,8 +717,8 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 
 <!-- ============ 表紙 ============ -->
 <header class="cover on-ink" id="cover">
-  <!-- 表紙はチャペル内観（挙式会場に設定していた画像）。無ければ何も出ません -->
-  <div class="cover-photo"><img src="images/chapel-nave.jpg" alt=""></div>
+  <!-- 表紙はブーケの写真。無ければ枠ごと消えます -->
+  <div class="cover-photo"><img src="images/cover-bouquet.jpg" alt=""></div>
 
   <p class="cover-label cv cv1">Wedding Invitation</p>
 
@@ -759,12 +732,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
     <p class="cover-place cv cv5">矢ケ崎チャペル　／　軽井沢</p>
   </div>
 
-
-  <svg class="ridge" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
-    <path class="r1" d="M0,150 L180,96 L300,124 L470,54 L620,110 L760,72 L900,128 L1060,60 L1220,116 L1340,88 L1440,132 L1440,220 L0,220 Z"/>
-    <path class="r2" d="M0,182 L160,144 L340,176 L520,128 L700,168 L880,134 L1040,172 L1230,140 L1440,178 L1440,220 L0,220 Z"/>
-    <path class="r3" d="M0,182 L160,144 L340,176 L520,128 L700,168 L880,134 L1040,172 L1230,140 L1440,178"/>
-  </svg>
 </header>
 
 <main>
@@ -1192,7 +1159,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   var dots = document.querySelector('.dots');
   var links = Array.prototype.slice.call(dots.querySelectorAll('a'));
   var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
-  var cover = document.getElementById('cover');
   var colo  = document.getElementById('colophon');
   var qbar  = document.querySelector('.quickbar');
   /* 下メニュー：どのセクションを読んでいるかでハイライトする */
@@ -1214,7 +1180,8 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
     qbar.classList.toggle('show', y > vh*0.75);
 
     /* 暗い面に重なったら反転 */
-    var onDark = (y < cover.offsetHeight - vh*0.5) || (y + vh*0.5 > docTop(colo));
+    /* 暗いのは奥付だけになった（表紙は紙の地） */
+    var onDark = (y + vh*0.5 > docTop(colo));
     dots.classList.toggle('inverted', onDark);
 
     var active = -1;
