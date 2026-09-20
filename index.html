@@ -352,16 +352,13 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 
 /* ===== 会場の一枚 ======================================== */
 /* 章の頭に置く大きな写真。写真は主役なので、少しだけ角を丸めて浮かせる */
-.venue-photo{
+/* .ph が後で margin:0 を指定しているので、下余白は .ph.venue-photo で効かせる。
+   ここが効かないと、次に来るカードの罫線が写真の下端に貼りつく */
+.ph.venue-photo{
   --ar:1000 / 650;
   border:none; border-radius:16px;
   margin-bottom:clamp(30px,5vh,50px);
   box-shadow:0 30px 60px -40px rgba(62,50,46,.55);
-}
-.venue-cap{
-  margin:1em 0 clamp(26px,5vh,44px);
-  font-size:.78rem; letter-spacing:.2em; text-align:right;
-  color:var(--ink-soft);
 }
 
 /* ===== 二段組 ============================================ */
@@ -718,8 +715,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   .quickbar{ display:block; }
   .colophon{ padding-bottom:clamp(96px,16vh,130px); }
   .btn{ width:100%; justify-content:center; }
-  /* 縦組みは幅を食うので、小さい画面では横組みに戻して積む */
-  .venue-cap{ text-align:left; }
   .note{ grid-template-columns:1fr; }
   .note h3 small{ display:inline-block; margin:0 0 0 1em; }
   .sec-head{ grid-template-columns:1fr; gap:1.2em 0; }
