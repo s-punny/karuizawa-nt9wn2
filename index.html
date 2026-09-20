@@ -31,10 +31,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Shippori+Mincho+B1:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- 観光マップ用。1枚の地図に複数のピンを立てたいので Leaflet を使っています。
-     Google の埋め込み（output=embed）は1枚につき1か所しか指定できないため。
-     読み込めなかった場合はマップの代わりに「マップで開く」ボタンが出ます。 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 /* ============================================================
    軽井沢 / WEDDING INVITATION & GUIDE
@@ -597,54 +593,9 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .note .fine{ font-size:.76rem; color:rgba(47,58,50,.52); }
 
 /* ===== 観光 ============================================== */
-.spot-map{
-  position:relative; overflow:hidden;
-  aspect-ratio:4 / 3;
-  background:var(--paper-2);
-  border-radius:14px;
-  box-shadow:0 24px 50px -36px rgba(31,36,32,.45);
-}
-@media (min-width:721px){ .spot-map{ aspect-ratio:16 / 9; } }
-/* 高さは Leaflet を待たずに枠側で決める（読み込み前でも崩れないように） */
-#spotmap{ position:absolute; inset:0; }
-.spot-map .leaflet-container{
-  width:100%; height:100%;
-  background:var(--paper-2); font-family:var(--sans);
-}
-/* 地図の色味は他の埋め込み地図と揃えて沈める */
-.spot-map .leaflet-tile-pane{ filter:grayscale(.5) sepia(.08) contrast(.96); }
-.spot-map .leaflet-popup-content-wrapper{ border-radius:10px; }
-.spot-map .leaflet-popup-content{
-  margin:.85em 1.2em; font-family:var(--mincho);
-  font-size:.82rem; letter-spacing:.1em; color:var(--ink);
-}
-.spot-map .leaflet-control-attribution{
-  background:rgba(247,245,240,.8); font-size:.56rem; letter-spacing:.02em;
-}
-.spot-map .leaflet-bar a{ color:var(--ink); }
-
-/* 番号ピン（カード側の 01〜04 と対応） */
-.pin{ background:none; border:0; }
-.pin span{
-  display:grid; place-content:center;
-  width:28px; height:28px; border-radius:999px;
-  background:var(--ink-deep); color:var(--paper);
-  border:1.5px solid var(--brass-lt);
-  font-family:var(--en); font-weight:600; font-size:.76rem;
-  box-shadow:0 7px 16px -7px rgba(31,36,32,.8);
-}
-
-/* 地図が読み込めなかったときの控え */
-.map-fallback{
-  position:absolute; inset:0; z-index:1;
-  display:grid; place-content:center; gap:1.2em; justify-items:center;
-  text-align:center; padding:1.6em;
-}
-.map-fallback em{
-  font-style:normal; font-size:.76rem; letter-spacing:.18em; line-height:2;
-  color:rgba(47,58,50,.58);
-}
-.spot-map.ready .map-fallback{ display:none; }
+/* 地図は他の章と同じ .map をそのまま使う（枠・比率・色味を揃えるため）。
+   中身は Google マイマップなので、ピンの追加・修正はマイマップ側で行う。 */
+#around .map{ margin-top:0; }
 
 .map-note{
   margin:1.1em 0 0; font-size:.74rem; letter-spacing:.12em; line-height:2;
@@ -782,7 +733,7 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 /* ===== 印刷 ============================================== */
 @media print{
   body{ background:#fff; }
-  body::after,.dots,.quickbar,.map,.spot-map,.map-note,.btn{ display:none !important; }
+  body::after,.dots,.quickbar,.map,.map-note,.btn{ display:none !important; }
   .ph{ break-inside:avoid; }
   .cover{ min-height:auto; background:#fff; color:#000; page-break-after:always; }
   .cover::before,.ridge,.cover-photo{ display:none; }
@@ -1114,15 +1065,17 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
         <p class="lead">翌朝は自由行動です。ホテルから歩いて行けるところを中心に、いくつかご紹介します。</p>
       </div>
 
-      <!-- 4か所をまとめて1枚に。座標は下の JS（spots 配列）にあります -->
-      <div class="spot-map rv d1">
-        <div id="spotmap"></div>
-        <div class="map-fallback">
-          <em>地図を読み込めませんでした</em>
-          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%BB%BD%E4%BA%95%E6%B2%A2" target="_blank" rel="noopener">マップで開く</a>
-        </div>
+      <!-- スポットをまとめた Google マイマップ。
+           ピンの追加・修正・並べ替えはマイマップ側で行う（このファイルは mid を持つだけ）。
+           マイマップの共有が「リンクを知っている全員が閲覧可」でないと家族側で表示されません。 -->
+      <div class="map rv d1">
+        <iframe src="https://www.google.com/maps/d/embed?mid=13OdmLiObBC8OqpdvMfM2bh3NhB0uxCY"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="軽井沢の観光スポットの地図"></iframe>
       </div>
       <p class="map-note">ピンをタップすると場所の名前が出ます。道順は、各スポットの「マップで開く」からご覧ください。</p>
+      <a class="btn rv d1" href="https://www.google.com/maps/d/viewer?mid=13OdmLiObBC8OqpdvMfM2bh3NhB0uxCY"
+         target="_blank" rel="noopener">地図をまとめて開く</a>
 
       <div class="spots">
         <article class="spot rv d2">
@@ -1211,7 +1164,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   <a href="#around"><span>観光</span><i></i></a>
 </nav>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1283,58 +1235,6 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', onScroll);
-})();
-
-/* 観光マップ：ピックアップした4か所を1枚に立てる。
-   Leaflet が読み込めなかった場合は何もせず、.map-fallback（マップで開く）が残ります。
-   座標を直すときは下の spots だけ触れば OK。
-   取得元：Google マップで場所を右クリック →「緯度・経度をコピー」 */
-(function(){
-  var host = document.getElementById('spotmap');
-  if (!host || !window.L) return;
-
-  var spots = [
-    { n:'01', name:'雲場池',                        lat:36.352295, lng:138.626991 },
-    { n:'02', name:'旧軽井沢銀座',                  lat:36.357616, lng:138.634537 },
-    { n:'03', name:'軽井沢・プリンスショッピングプラザ', lat:36.340455, lng:138.631678 },
-    { n:'04', name:'ハルニレテラス',                lat:36.359335, lng:138.590267 }
-  ];
-
-  var map = L.map(host, {
-    /* 記事のなかの地図なので、スクロールを奪わないようにしている。
-       スマホはドラッグを切って（ピンチ拡大と ± ボタンは効く）、ページの縦スクロールを優先 */
-    scrollWheelZoom:false,
-    dragging: !L.Browser.mobile
-  });
-
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
-  }).addTo(map);
-
-  var pts = [];
-  spots.forEach(function(s){
-    L.marker([s.lat, s.lng], {
-      title: s.name,
-      icon: L.divIcon({
-        className:'pin', html:'<span>' + s.n + '</span>',
-        iconSize:[28,28], iconAnchor:[14,14], popupAnchor:[0,-15]
-      })
-    }).addTo(map).bindPopup(s.name);
-    pts.push([s.lat, s.lng]);
-  });
-
-  function frame(){
-    map.invalidateSize();
-    /* 左上はズームボタン、右下は出典表示が乗るので、その分だけ内側に寄せる */
-    map.fitBounds(pts, { paddingTopLeft:[58,40], paddingBottomRight:[40,48] });
-  }
-  frame();
-  /* 章が画面に入るときに .rv のアニメーションが走るので、そのあとで測り直す */
-  window.addEventListener('load', frame);
-  window.addEventListener('resize', frame);
-
-  host.parentNode.classList.add('ready');
 })();
 </script>
 </body>
