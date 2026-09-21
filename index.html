@@ -27,8 +27,11 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <!-- ホーム画面に追加したときのアイコン。iOS は apple-touch-icon、
-     Android は manifest の icons を見る。ブラウザのタブは下の SVG。 -->
-<link rel="apple-touch-icon" href="images/app-icon-180.png">
+     Android は manifest の icons を見る。ブラウザのタブは下の SVG。
+     180 と 192 はインデックスカラーではなく通常の RGB の PNG にしてある
+     （Apple がアイコンに推奨しているのがこちらのため）。 -->
+<link rel="apple-touch-icon" sizes="180x180" href="images/app-icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/app-icon-192.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="apple-mobile-web-app-title" content="結婚式のご案内">
 <meta name="application-name" content="結婚式のご案内">
