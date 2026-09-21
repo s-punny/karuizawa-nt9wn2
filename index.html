@@ -29,10 +29,13 @@
 <!-- ホーム画面に追加したときのアイコン。iOS は apple-touch-icon、
      Android は manifest の icons を見る。ブラウザのタブは下の SVG。
      180 と 192 はインデックスカラーではなく通常の RGB の PNG にしてある
-     （Apple がアイコンに推奨しているのがこちらのため）。 -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/app-icon-180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="images/app-icon-192.png">
-<link rel="manifest" href="site.webmanifest">
+     （Apple がアイコンに推奨しているのがこちらのため）。
+     og:image と同じく絶対URLで書く。相対だと解決に失敗する環境があるため。 -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://s-punny.github.io/karuizawa-nt9wn2/images/app-icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://s-punny.github.io/karuizawa-nt9wn2/images/app-icon-192.png">
+<!-- 拡張子は .webmanifest ではなく .json。GitHub Pages が
+     .webmanifest にどの MIME を返すか当てにできないため -->
+<link rel="manifest" href="https://s-punny.github.io/karuizawa-nt9wn2/manifest.json">
 <meta name="apple-mobile-web-app-title" content="結婚式のご案内">
 <meta name="application-name" content="結婚式のご案内">
 

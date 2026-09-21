@@ -8,7 +8,7 @@
 ```
 index.html        本体（CSS / JS も内包）
 images/           写真の置き場所（README.md に一覧あり）
-site.webmanifest  ホーム画面に追加したときの名前とアイコン
+manifest.json     ホーム画面に追加したときの名前とアイコン
 _ogp.html         OGP画像の版下（ページ本体ではない）
 robots.txt        検索エンジンからのクロールを拒否
 .nojekyll         GitHub Pages の Jekyll 処理を無効化
