@@ -502,7 +502,9 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .qb-sheet{
   position:absolute; right:0; bottom:calc(100% + 10px);
   min-width:11.5em;
-  padding:.45em;
+  /* 内側の余白を持たせない。行の塗りをパネルの端まで届かせるため。
+     上下の行は overflow で角丸に沿って切られる */
+  padding:0; overflow:hidden;
   /* 後ろの本文が透けると読めないので、塗りつぶし */
   background:#fcfaf8;
   border:1px solid rgba(255,255,255,.8);
@@ -516,14 +518,14 @@ section{ padding-block:clamp(70px,17vh,90px); position:relative; }
 .qb-sheet ul{ margin:0; padding:0; list-style:none; }
 .qb-sheet li + li{ border-top:1px solid var(--rule); }
 .qb-sheet a{
-  display:block; padding:.62em .9em;
+  display:block; padding:.78em 1.15em;
   font-size:.74rem; letter-spacing:.14em; line-height:1.5;
-  color:var(--ink-soft); text-decoration:none; border-radius:10px;
+  color:var(--ink-soft); text-decoration:none;
   transition:background .25s ease, color .25s ease;
 }
 .qb-sheet a:hover,.qb-sheet a:focus-visible{ background:rgba(150,112,106,.09); color:var(--ink); }
-/* いま読んでいるところ */
-.qb-sheet a.on{ color:var(--ink); background:rgba(150,112,106,.08); }
+/* いま読んでいるところ。行いっぱいに塗る */
+.qb-sheet a.on{ color:var(--ink); background:rgba(150,112,106,.13); }
 
 /* ===== 参列者 ============================================ */
 .roster{ display:grid; gap:clamp(28px,5vh,44px); }
