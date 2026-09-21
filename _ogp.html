@@ -12,7 +12,9 @@
   body{ width:1200px; height:630px; background:var(--paper); color:var(--ink);
         display:flex; align-items:center; justify-content:center; gap:72px; padding:64px 76px;
         font-family:var(--mincho); -webkit-font-smoothing:antialiased; }
-  .ph{ width:502px; height:502px; flex:none; overflow:hidden; border-radius:4px;
+  /* 角丸は LINE の吹き出しに合わせている。LINE 上での表示倍率が約0.58なので、
+     ここで36pxにすると向こうでは20px前後に見える */
+  .ph{ width:502px; height:502px; flex:none; overflow:hidden; border-radius:36px;
        box-shadow:0 34px 60px -34px rgba(70,52,48,.42); }
   .ph img{ width:100%; height:100%; object-fit:cover; display:block; }
   .lbl{ font-family:var(--en); font-weight:500; font-size:17px; letter-spacing:.5em;
